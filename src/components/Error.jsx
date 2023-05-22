@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 
 export const Error = ({ error, clearError }) => {
+
     return (
       <>
         <div

@@ -52,7 +52,7 @@ export const CoursesPage = () => {
 
   return (
     <Main page={"courses"}>
-      <div className="container">
+      <div className="container mb-5">
         <div className="row mt-5">
           <h2 className="text-center">Lista de cursos</h2>
           <div className="p-4 shadow-lg">
@@ -63,7 +63,7 @@ export const CoursesPage = () => {
             {courses.length < 1 && !isLoading && <div>Aún no tiene ningun curso creado</div>}
           </div>
         </div>
-        <div className="row mt-5">
+        <div className="row mt-5 mb-5">
           <h2 className="text-center">Crea un nuevo curso</h2>
           <div className="col-12 shadow-lg p-4 d-flex justify-content-center">
             <FormAddCourse courses={courses} setCourses={setCourses} />

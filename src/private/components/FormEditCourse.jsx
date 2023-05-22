@@ -1,83 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Loader } from "../../components/Loader";
 import useHttp from "../../hooks/useHttp";
 import { useToken } from "../../hooks/useToken";
 import { BASE_URL } from "../../api/api";
 import { useNavigate } from "react-router-dom";
-import { validationType } from "../../validations/validator";
-const initialForm = {
-  name: "",
-  year: "",
-};
-export const FormEditCourse = ({ course, setCourse }) => {
-  const [editCourse, setEditCourse] = useState(initialForm);
-  const [isEdit, setisEdit] = useState(false);
+import { useForm } from "react-hook-form";
+import { ConfirmationModal } from "../../components/ConfirmationModal";
+import { Error } from "../../components/Error";
+
+
+export const FormEditCourse = ({ course }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: { id: course.id, name: course.name, year: course.year },
+  });
+  const [showModal, setShowModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
   const { getToken } = useToken();
   const { isLoading, sendRequest, error } = useHttp();
   const navigate = useNavigate();
-  useEffect(() => {
-    setEditCourse(course);
-  }, [course]);
-
-  const onInputChange = (e) => {
-    e.preventDefault();
-    if (
-      e.target.name == "name" &&
-      !(
-        validationType["text"](e.target.value) &&
-        validationType["length"](e.target.value, 30)
-      )
-    ) {
-      return false;
-    }
-    if (
-      e.target.name == "year" &&
-      !(
-        validationType["number"](e.target.value) &&
-        validationType["length"](e.target.value, 20)
-      )
-    ) {
-      return false;
-    }
-
-    setEditCourse({ ...editCourse, [e.target.name]: e.target.value });
-  };
-
-  const startEdit = (e) => {
-    e.preventDefault();
-    setisEdit(true);
-  };
-
-  const cancelEdit = (e) => {
-    e.preventDefault();
-    setEditCourse(course);
-    setisEdit(false);
-  };
-
-  const confirmEdit = async (id) => {
-    const token = getToken();
-    const url = `${BASE_URL}/course/${id}/update`;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
-    const body = {
-      id,
-      name: editCourse.name,
-      year: editCourse.year,
-    };
-
-    const response = await sendRequest(
-      url,
-      "PUT",
-      JSON.stringify(body),
-      headers
-    );
-    if (response) {
-      setisEdit(false);
-      setCourse(response.data);
-    }
-  };
 
   const deleteCourse = async (id) => {
     e.preventDefault();
@@ -95,76 +39,121 @@ export const FormEditCourse = ({ course, setCourse }) => {
       JSON.stringify(body),
       headers
     );
+   if (response) {
+     setSuccessMessage("Curso eliminado con éxito");
+     setTimeout(() => {
+       navigate(`/courses`);
+     }, 1500);
+   }
+  };
+
+  const onSubmit = async (data) => {
+    const { id, name, year } = data;
+    const token = getToken();
+    const url = `${BASE_URL}/course/${id}/update`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const body = {
+      id,
+      name: name,
+      year: year,
+    };
+
+    const response = await sendRequest(
+      url,
+      "PUT",
+      JSON.stringify(body),
+      headers
+    );
     if (response) {
-      navigate(`/courses`);
+      setSuccessMessage(response.message)
+      setTimeout(() => {
+        navigate(`/courses`);
+      },1500)
     }
   };
+  
   return (
     <>
-      <form className="col-12 col-md-6">
+      <form className="col-12 col-md-6" onSubmit={handleSubmit(onSubmit)}>
         <label className="form-label" htmlFor="name">
           Nombre
         </label>
-        {isEdit ? (
-          <input
-            id="name"
-            type="text"
-            className="form-control border-success"
-            name="name"
-            value={editCourse.name}
-            onChange={onInputChange}
-            disabled={!isEdit}
-          />
-        ) : (
-          <div className="form-control" style={{ backgroundColor: "#e9ecef" }}>
-            {editCourse.name || ""}
-          </div>
+        <input
+          type="text"
+          className="form-control border-success"
+          {...register("name", {
+            required: {
+              value: true,
+              message: "El nombre es requerido",
+            },
+            minLength: {
+              value: 3,
+              message: "El nombre debe tener al menos 3 caracteres",
+            },
+            maxLength: {
+              value: 20,
+              message: "El nombre debe tener menos de 20 caracteres",
+            },
+          })}
+        />
+        {errors && errors.name && <Error error={errors.name.message} />}
+        {error && error.name && (
+          <Error error={error.name} clearError={clearError} />
         )}
         <label className="form-label" htmlFor="year">
           Año
         </label>
-        {isEdit ? (
-          <input
-            id="year"
-            type="text"
-            name="year"
-            className="form-control border-success"
-            value={editCourse.year}
-            onChange={onInputChange}
-          />
-        ) : (
-          <div className="form-control" style={{ backgroundColor: "#e9ecef" }}>
-            {editCourse.year || ""}
-          </div>
+        <input
+          type="number"
+          className="form-control border-success"
+          {...register("year", {
+            required: {
+              value: true,
+              message: "El año es requerido",
+            },
+            min: {
+              value: 1,
+              message: "El año debe ser mayor a 0",
+            },
+            max: {
+              value: 3000,
+              message: "El año debe ser menor a 3000",
+            },
+          })}
+        />
+        {errors && errors.year && <Error error={errors.year.message} />}
+        {error && error.year && (
+          <Error error={error.year} clearError={clearError} />
+        )}
+        {successMessage && (
+          <div className="alert alert-success">{successMessage}</div>
         )}
         <div className="d-flex justify-content-center mt-3 gap-3">
-          {isLoading ? (
+          {isLoading || successMessage ? (
             <Loader />
-          ) : isEdit ? (
-            <>
-              <button
-                className="btn btn-primary"
-                onClick={(e) => confirmEdit(editCourse.id)}
-              >
-                Guardar
-              </button>
-              <button className="btn btn-danger" onClick={cancelEdit}>
-                Cancelar
-              </button>
-            </>
           ) : (
-            <>
-              <button className="btn btn-primary" onClick={startEdit}>
-                Editar
-              </button>
+            <div className="col-12 d-flex gap-2">
+              <button className="btn btn-primary">Guardar</button>
               <button
-                className="btn btn-danger text-light"
-                onClick={(e) => deleteCourse(e,course.id)}
+                className="btn btn-danger text-white"
+                onClick={(e) => {
+                  e.preventDefault();
+                  return setShowModal(true);
+                }}
               >
                 Borrar
               </button>
-            </>
+            </div>
           )}
+          <ConfirmationModal
+            show={showModal}
+            message="¿Estás seguro que deseas borrar el curso?"
+            onConfirm={() => deleteCourse(course.id)}
+            onCancel={() => setShowModal(false)}
+          />
         </div>
       </form>
     </>
