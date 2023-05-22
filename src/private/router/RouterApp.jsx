@@ -13,6 +13,7 @@ import { TeachersPage } from "../pages/TeachersPage";
 import { Works } from "../pages/Works";
 import { StudentAssigned } from "../pages/StudentAssigned";
 import { StudentDetails } from "../pages/StudentDetails";
+import { TeacherDetails } from "../pages/TeachersDetails";
 
 export const RouterApp = () => {
   return (
@@ -39,6 +40,10 @@ export const RouterApp = () => {
             path="student/:student_id/detail"
             element={<StudentDetails />}
           ></Route>
+          {/* <Route
+            path="teacher/:teacher_id/detail"
+            element={<TeacherDetails />}
+          ></Route> */}
           <Route path="teachers" element={<TeachersPage />}></Route>
           <Route path="facturation" element={<FacturationPage />}></Route>
           <Route path="courses" element={<CoursesPage />}></Route>

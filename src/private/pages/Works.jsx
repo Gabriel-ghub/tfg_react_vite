@@ -24,7 +24,7 @@ export const Works = ({ order_id }) => {
 
   useEffect(() => {
     const getWorks = async () => {
-      try {
+   
         const url = `${BASE_URL}/work/${order_id}`;
         const token = getToken();
         const headers = {
@@ -32,11 +32,9 @@ export const Works = ({ order_id }) => {
           Authorization: `Bearer ${token}`,
         };
         const response = await sendRequest(url, "GET", null, headers);
-        console.log(response);
-        setWorks(response);
-      } catch (error) {
-        console.log(error);
-      }
+        if(response){
+          setWorks(response);
+        }
     };
     getWorks();
     return () => { };
@@ -57,7 +55,6 @@ export const Works = ({ order_id }) => {
       Authorization: `Bearer ${token}`,
     };
     const response = await sendRequest(url, "POST", body, headers);
-    console.log(response);
 
     if (response) {
       setWork("");
@@ -85,30 +82,14 @@ export const Works = ({ order_id }) => {
 
   const handleManage = async (e, id) => {
     const manageWork = works.find((w) => w.id === id);
-    console.log(manageWork)
     setIsManaging(true);
     setWorkManaging(manageWork)
-    // try {
-    //   const url = `${BASE_URL}/work/${id}/students`
-    //   const token = getToken();
-    //   const headers = {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-type": "application/json"
-    //   }
-    //   const response = await sendRequest(url,"GET",null,headers)
-    //   console.log(response)
-    //   setAssignedStudents(response)
-    // } catch (error) {
-    //   console.log(error)
-    // }
+    
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 100);
   };
 
-  const handleGetStudents = async () => {
-
-  }
 
   return (
     <>

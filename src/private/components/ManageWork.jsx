@@ -50,7 +50,6 @@ export const ManageWork = ({ work }) => {
         "Content-Type": "application/json"
       }
       const response = await sendRequest(url_students, "GET", null, headers);
-      console.log(response)
       const assigned = response.ASSIGNED.map(el => {
         return { value: el.id, label: `${el.name} ${el.surname}` }
       })
@@ -60,12 +59,10 @@ export const ManageWork = ({ work }) => {
       setAssignedStudent(assigned)
       setNotAssignedStudent(notAssigned)
     } catch (e) {
-      console.log(e)
     }
   }
 
   const handleAttachStudent = async (e, student_id) => {
-    console.log(work.id)
     const url = `${BASE_URL}/work/attach`
     const token = getToken();
     const headers = {
@@ -83,16 +80,11 @@ export const ManageWork = ({ work }) => {
       setAssignedStudent([...assignedStudents, newAssignedStudents])
       setNotAssignedStudent(tempNot_assignedStudents)
     } catch (error) {
-      console.log(error)
     }
   }
 
   const handleDettachStudent = async (event, student_id) => {
-    // const dettachStudent = assignedStudents.filter((stu) => stu.id === student_id)
-    // const temp_assignedStudents = notAssignedStudents.filter((stu) => stu.id !== student_id)
-    // console.log(dettachStudent)
-    // console.log(temp_assignedStudents)
-    // return ;
+
     const url = `${BASE_URL}/work/dettach`
     const token = getToken();
     const headers = {
@@ -103,15 +95,16 @@ export const ManageWork = ({ work }) => {
       user_id: student_id,
       work_id: work.id
     }
-    try {
       const response = await sendRequest(url, "PATCH", JSON.stringify(body), headers)
-      const dettachStudent = assignedStudents.filter((stu) => stu.id === student_id)[0]
-      const temp_assignedStudents = assignedStudents.filter((stu) => stu.id !== student_id)
-      setAssignedStudent(temp_assignedStudents)
-      setNotAssignedStudent([...notAssignedStudents, dettachStudent])
-    } catch (error) {
-      console.log(error)
-    }
+      if(response){
+        const dettachStudent = assignedStudents.filter((stu) => stu.id === student_id)[0]
+        const temp_assignedStudents = assignedStudents.filter((stu) => stu.id !== student_id)
+        setAssignedStudent(temp_assignedStudents)
+        setNotAssignedStudent([...notAssignedStudents, dettachStudent])
+      }else{
+        console.log("error al desasignar")
+      }
+
   }
 
   const columns_assigned = [
@@ -172,59 +165,12 @@ export const ManageWork = ({ work }) => {
   ];
 
   const handleChange = (e) => {
-    console.log(e)
   }
 
   return (
-    // <>
-    //   <h3 className="text-center">{work.description}</h3>
-    //   <div className="col-12">
-    //     {courses.length > 0 && (
-    //       <SelectCourse courses={courses} setCourseId={setCourseId} />
-    //     )}
-    //     {isLoading ? (
-    //       <Loader />
-    //     ) : (
-    //       <div className="d-flex justify-content-center py-4">
-    //         <button className="btn btn-primary" onClick={handleGetStudents}>Buscar</button>
-    //       </div>
-    //     )}
-    //   </div>
-    //   <div className="row">
-    //     <div className="col-12">
-    //       <h5>Alumnos asignados</h5>
-    //     </div>
-    //     <div className="col-12">
-    //       {(assignedStudents.length > 0
-    //         ? <DataTable columns={columns_assigned} data={assignedStudents} />
-    //         : <p>Este trabajo no tiene alumnos asignados</p>)
-    //       }
-    //     </div>
-    //     <div className="col-12">
-    //       <h5>Alumnos sin asignar</h5>
-    //     </div>
-    //     <div className="col-12">
-    //       {(notAssignedStudents.length > 0
-    //         ? <DataTable columns={columns_not_assigned} data={notAssignedStudents} pagination />
-    //         : <p>Este curso no tiene mas alumnos</p>)
-    //       }
-    //     </div>
-    //   </div>
-    // </>
+  
     <>
       <div className="col-12 pb-4 my-4 border-bottom border-start border-end shadow">
-          {/* {courses.length > 0 && (
-            <div className="col-12 col-md-6">
-            <SelectCourse courses={courses} setCourseId={setCourseId} />
-            </div>
-          )}
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <div className="py-4 col-md-6">
-              <button className="btn btn-primary" onClick={handleGetStudents}>Buscar</button>
-            </div>
-          )} */}
         {courses.length > 0 && (
               <Select options={courses} onChange={handleGetStudents}/>
          )}

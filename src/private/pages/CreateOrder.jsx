@@ -11,18 +11,6 @@ import { validationType } from "../../validations/validator";
 import { Error } from "../../components/Error";
 import { useForm } from "react-hook-form";
 
-const initalForm = {
-  id: "",
-  date_in: "",
-  kilometres: "",
-  state: "",
-  name: "",
-  surname: "",
-  phone: "",
-  email: "",
-  car_id: "",
-};
-
 export const CreateOrder = () => {
   const { plate_car } = useParams();
   const { id, carInit, getCarInfo } = useContext(CarContext);
@@ -82,7 +70,6 @@ export const CreateOrder = () => {
     setValue("kilometres", formattedValue);
   };
   const onSubmit = (data) => {
-    console.log(data);
     if (anomalies.length < 1) {
       setErrorsEmpty("Debe crear al menos una anomalía");
       return;
@@ -345,7 +332,6 @@ export const CreateOrder = () => {
                   <input
                     type="submit"
                     className="btn btn-primary"
-                    // disabled={(name == "" || surname == "" || kilometres == "" || phone == "" || email == "")}
                     value="Crear orden"
                   />
                 </div>

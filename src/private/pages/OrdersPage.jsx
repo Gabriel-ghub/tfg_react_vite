@@ -159,25 +159,8 @@ export const OrdersPage = () => {
   ];
   const onSubmit = async (data) => {
     setIsLoading(true);
-    console.log(errors)
-    console.log(data);
     setMensaje(false);
 
-    // return
-    // const plate = getValues("plate")
-
-    // const url = `${BASE_URL}/order/${plate}`
-    // const token = getToken();
-    // const headers = {
-    //     Authorization: `Bearer ${token}`
-    // }
-    // const response = await sendRequest(url, "GET", null, headers)
-    // if (response) {
-    //     setOrders(response)
-    //     setValue("plate", "")
-    // } else {
-    //     setCarOrders([])
-    // }
     switch (data.filter) {
       case "plate":
         const filter_orders = orders.filter(
@@ -214,67 +197,57 @@ export const OrdersPage = () => {
   return (
     <>
       <Main page={"orders_page"}>
-        {/*<div className="row shadow-lg py-3 px-2">*/}
-        {/*  <form onSubmit={handleSubmit(onSubmit)} className="col-12 col-md-4">*/}
-        {/*    <label htmlFor="" className="h2">Matrícula</label>*/}
-        {/*    <input type="text" className="form-control" {...register("plate",validations)} />*/}
-        {/*    {errors && errors.plate && <p className="my-1">{errors.plate.message}</p> }*/}
-        {/*    /!* {error && error.plate && <Error error={error.plate} clearError={clearError}/>} *!/*/}
-        {/*    {isLoading ? <Loader /> : <div className="mt-3 d-flex gap-2"><button type="submit" className="btn btn-primary">Buscar</button><button onClick={handleCleanForm} className="btn btn-warning">Limpiar</button></div>}*/}
-        {/*  </form>*/}
-        {/*  <div className="col-6">*/}
-        {/*    {carOrders.length> 0 && <DataTable columns={columnsCar} data={carOrders} /> }*/}
-        {/*  </div>*/}
-        {/*</div>*/}
-        <div className="row shadow-lg mt-5 py-5 px-2">
-          <h2>Listado de órdenes</h2>
-          <h4>Filtro</h4>
-          <form onSubmit={handleSubmit(onSubmit)} className="col-12 col-md-4">
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                {...register("value", validations)}
-              />
-              <select className="form-select mt-2" {...register("filter")}>
-                <option value="plate" className="">
-                  Matricula
-                </option>
-                <option value="name">Nombre</option>
-                <option value="surnname">Apellido</option>
-              </select>
-            </div>
-
-            {errors && errors.plate && (
-              <p className="my-1">{errors.plate.message}</p>
-            )}
-            {/* {error && error.plate && <Error error={error.plate} clearError={clearError}/>} */}
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <div className="mt-3 d-flex gap-2">
-                <button type="submit" className="btn btn-primary">
-                  Buscar
-                </button>
-                <button onClick={handleCleanForm} className="btn btn-warning">
-                  Limpiar
-                </button>
+        <div className="row mt-5">
+          <h2 className="text-center">Listado de órdenes</h2>
+          <div className="col-12 p-4 shadow-lg">
+            <h4>Filtro</h4>
+            <form onSubmit={handleSubmit(onSubmit)} className="col-12 col-md-4">
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  {...register("value", validations)}
+                />
+                <select className="form-select mt-2" {...register("filter")}>
+                  <option value="plate" className="">
+                    Matricula
+                  </option>
+                  <option value="name">Nombre</option>
+                  <option value="surnname">Apellido</option>
+                </select>
               </div>
+
+              {errors && errors.plate && (
+                <p className="my-1">{errors.plate.message}</p>
+              )}
+              {/* {error && error.plate && <Error error={error.plate} clearError={clearError}/>} */}
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <div className="mt-3 d-flex gap-2">
+                  <button type="submit" className="btn btn-primary">
+                    Buscar
+                  </button>
+                  <button onClick={handleCleanForm} className="btn btn-warning">
+                    Limpiar
+                  </button>
+                </div>
+              )}
+            </form>
+            {isLoading ? (
+              <Loader></Loader>
+            ) : mensaje ? (
+              <p>Error al cargar los datos</p>
+            ) : orders.length === 0 ? (
+              <p>No se encontraron resultados</p>
+            ) : (
+              <DataTable
+                columns={columns}
+                data={filtered.length > 0 ? filtered : orders}
+                pagination
+              />
             )}
-          </form>
-          {isLoading ? (
-            <Loader></Loader>
-          ) : mensaje ? (
-            <p>Error al cargar los datos</p>
-          ) : orders.length === 0 ? (
-            <p>No se encontraron resultados</p>
-          ) : (
-            <DataTable
-              columns={columns}
-              data={filtered.length > 0 ? filtered : orders}
-              pagination
-            />
-          )}
+          </div>
         </div>
       </Main>
     </>

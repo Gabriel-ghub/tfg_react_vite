@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { SelectCourse } from "./SelectCourse";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
@@ -8,8 +7,9 @@ import { Loader } from "../../components/Loader";
 import uuid from "react-uuid";
 import { validationType } from "../../validations/validator";
 import { Error } from "../../components/Error";
+import Select from "react-select";
 
-export const FormAddStudents = ({ courses }) => {
+export const FormAddStudents = ({ options, resetSelect }) => {
   const {
     register,
     handleSubmit,
@@ -18,6 +18,7 @@ export const FormAddStudents = ({ courses }) => {
     setValue,
     getValues,
     reset,
+    setError,
   } = useForm();
   const [errorForm, setErrorForm] = useState(false);
   const [courseId, setCourseId] = useState(false);
@@ -25,10 +26,17 @@ export const FormAddStudents = ({ courses }) => {
   const { isLoading, sendRequest, error, clearError } = useHttp();
   const [errorRequest, setErrorRequest] = useState([]);
   const [successRequest, setSuccessRequest] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(false);
 
   const onSubmit = async (data) => {
     setErrorForm(false);
-
+    if (!courseId) {
+      setError("course", {
+        type: "custom",
+        message: "Debe seleccionar un curso",
+      });
+      return;
+    }
     const url = `${BASE_URL}/user/createStudent`;
     const token = getToken();
     const headers = {
@@ -36,7 +44,7 @@ export const FormAddStudents = ({ courses }) => {
       "Content-Type": "application/json",
     };
     const body = {
-      name:data.name.trim(),
+      name: data.name.trim(),
       surname: data.surname.trim(),
       email: data.email.trim(),
       course_id: courseId,
@@ -50,11 +58,16 @@ export const FormAddStudents = ({ courses }) => {
     );
     if (response) {
       setSuccessRequest(response.message);
+      setSelectedOption(null)
       reset();
     }
   };
 
-
+  const handleSelect = (data) => {
+    setSelectedOption(data);
+    setCourseId(data.value);
+    setValue("course", data.value);
+  };
 
   return (
     <>
@@ -152,10 +165,14 @@ export const FormAddStudents = ({ courses }) => {
             )}
           </div>
           <div className="col-6">
-            <SelectCourse
-              courses={courses}
-              setCourseId={setCourseId}
-            ></SelectCourse>
+            <label htmlFor="" className="form-label">
+              Curso
+            </label>
+            <Select options={options} onChange={(data)=>handleSelect(data)} value={selectedOption} />
+            {errors && errors.course && <Error error={errors.course.message} />}
+            {error && error.course && (
+              <Error error={error.course} clearError={clearError} />
+            )}
           </div>
         </div>
         {errorForm && (
@@ -169,7 +186,7 @@ export const FormAddStudents = ({ courses }) => {
           </div>
         ))}
         {successRequest && (
-          <div key={uuid()} className="alert alert-info" role="alert">
+          <div key={uuid()} className="alert alert-info mt-3" role="alert">
             {successRequest}
           </div>
         )}

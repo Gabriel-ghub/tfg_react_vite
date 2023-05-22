@@ -33,23 +33,7 @@ export const CardOrder = ({
     setValue,
   } = useForm();
 
-  // const { register, handleSubmit, watch, formState: { errors }, getValues, setValue } = useForm({
-  //     defaultValues: async () => {
-  //         const url = `${BASE_URL}/orders/worksandmaterials/${id}`;
-  //         const token = getToken()
-  //         const headers = {
-  //             Authorization: `Bearer ${token}`,
-  //             "Content-Type": "application/json",
-  //         };
-  //         const response = await sendRequest(url, "GET", null, headers)
-  //         console.log(response)
-  //         if (response) {
-  //             const newMaterials = response.materials.map(each => each.description)
-  //             setMaterials(newMaterials)
-  //             return { work_description: response.works[0].description }
-  //         }
-  //     }
-  // });
+ 
   useEffect(() => {
     const fetchData = async () => {
       const url = `${BASE_URL}/orders/worksandmaterials/${id}`;
@@ -59,7 +43,6 @@ export const CardOrder = ({
         "Content-Type": "application/json",
       };
       const response = await sendRequest(url, "GET", null, headers);
-      console.log(response);
       if (response) {
         setMaterials(response.materials);
         setWorks(response.works);
@@ -84,7 +67,6 @@ export const CardOrder = ({
       quantity,
       order_id: id,
     };
-    console.log(body);
     const urlAddWorks = `${BASE_URL}/material`;
     const token = getToken();
     const headers = {
@@ -99,7 +81,6 @@ export const CardOrder = ({
       headers
     );
     if (response) {
-      console.log(response);
       setValue("material", "");
       setValue("quantity", "");
 
@@ -147,7 +128,6 @@ export const CardOrder = ({
 
     const response = await sendRequest(url_delete, "DELETE", null, headers);
     if (response) {
-      console.log(response);
       const temp_materials = materials.filter((each) => each.id != id);
       setMaterials(temp_materials);
     }
@@ -164,7 +144,6 @@ export const CardOrder = ({
 
     const response = await sendRequest(url_delete, "DELETE", null, headers);
     if (response) {
-      console.log(response);
       const temp_works = works.filter((each) => each.id != id);
       setWorks(temp_works);
     }

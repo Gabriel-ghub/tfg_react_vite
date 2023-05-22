@@ -30,7 +30,6 @@ const useHttp = () => {
         headers,
         signal: abortController.signal,
       });
-      console.log(response)
       if (response.ok) {
         const responseData = await response.json();
         clearError();
@@ -38,7 +37,6 @@ const useHttp = () => {
         return responseData;
       } else {
         const errorResponse = await response.json();
-        console.log(errorResponse)
         setError(errorResponse.errors || "Error en la petición");
         setIsLoading(false);
         return null;
@@ -58,29 +56,3 @@ const useHttp = () => {
 };
 
 export default useHttp;
-
-
-// try {
-//   const response = await fetch(url, {
-//     method,
-//     body,
-//     headers,
-//     signal: abortController.signal,
-//   });
-//   if (!response.ok) {
-//     throw new Error(
-//       JSON.stringify({code:response.status,ok:response.ok})
-//     );
-//   }
-//   const responseData = await response.json();
-//   clearError();
-//   setIsLoading(false);
-//   return responseData;
-// } catch (err) {
-//   console.log("linea antes del setLoadingfalse")
-//   setIsLoading(false);
-//   const errores = JSON.parse(err)
-//   console.log(errores)
-//   return
-//   return err;
-// }

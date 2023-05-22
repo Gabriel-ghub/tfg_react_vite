@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { Loader } from "../../components/Loader";
 import { AddAnomaly } from "../components/AddAnomaly";
 import { Anomaly } from "../components/Anomaly";
@@ -57,7 +57,6 @@ export const OrderDetails = () => {
           },
         });
         const data = await response.json();
-        console.log(data);
         setOrder(data.order);
         if (data.order.state == 1) {
           setIsFinished(true);
@@ -135,9 +134,6 @@ export const OrderDetails = () => {
   }, [isFinished]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-    console.log(data);
-
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -187,288 +183,291 @@ export const OrderDetails = () => {
         <Loader />
       ) : formData.state === 0 ? (
         <>
+        <Link to="/orders" className="btn btn-primary">Volver</Link>
           <div id="main" className="container">
             <div className="row mt-5" id="real-estates-detail">
               <h3 className="text-center">Detalles de la orden</h3>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="p-3 shadow-lg border border-1 rounded"
-              >
-                <div className="row p-3">
-                  <h4 className="d-inline-block">
-                    {plate && `Matrícula: ${plate}`}
-                  </h4>
-                </div>
-                <div className="row p-3">
-                  <div className="col-12 col-md-6 pe-2">
-                    <h4>Datos de la orden</h4>
-                    <div className=" mt-3">
-                      <label className="">ID de orden:</label>
-                      <div className="form-control bg-success">
-                        {formData.id}
+
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="p-3 shadow-lg border border-1 rounded"
+                >
+                  <div className="row p-3">
+                    <h4 className="d-inline-block">
+                      {plate && `Matrícula: ${plate}`}
+                    </h4>
+                  </div>
+                  <div className="row p-3">
+                    <div className="col-12 col-md-6 pe-2">
+                      <h4>Datos de la orden</h4>
+                      <div className=" mt-3">
+                        <label className="">ID de orden:</label>
+                        <div className="form-control bg-success">
+                          {formData.id}
+                        </div>
                       </div>
-                    </div>
-                    <div className="mt-3">
-                      <label className=""> Kilometros:</label>
-                      {editing ? (
-                        <>
-                          <input
-                            type="text"
-                            maxLength="10"
-                            {...register("kilometres", {
-                              required: {
-                                value: true,
-                                message: "Campo requerido",
-                              },
-                              maxLength: {
-                                value: 10,
-                                message: "Longitud maxima 10 caracteres",
-                              },
-                              minLength: {
-                                value: 1,
-                                message: "Longitud minima 1 caracter",
-                              },
-                            })}
-                            className="form-control"
-                            onChange={handleKilometresChange}
-                          />
-                          {error && error.kilometres && (
-                            <Error
-                              error={error.kilometres}
-                              clearError={clearError}
+                      <div className="mt-3">
+                        <label className=""> Kilometros:</label>
+                        {editing ? (
+                          <>
+                            <input
+                              type="text"
+                              maxLength="10"
+                              {...register("kilometres", {
+                                required: {
+                                  value: true,
+                                  message: "Campo requerido",
+                                },
+                                maxLength: {
+                                  value: 10,
+                                  message: "Longitud maxima 10 caracteres",
+                                },
+                                minLength: {
+                                  value: 1,
+                                  message: "Longitud minima 1 caracter",
+                                },
+                              })}
+                              className="form-control"
+                              onChange={handleKilometresChange}
                             />
-                          )}
-                          {errors && errors.kilometres && (
-                            <Error error={errors.kilometres.message} />
-                          )}
-                        </>
-                      ) : (
+                            {error && error.kilometres && (
+                              <Error
+                                error={error.kilometres}
+                                clearError={clearError}
+                              />
+                            )}
+                            {errors && errors.kilometres && (
+                              <Error error={errors.kilometres.message} />
+                            )}
+                          </>
+                        ) : (
+                          <div
+                            className="form-control"
+                            style={{ backgroundColor: "#e9ecef" }}
+                          >
+                            {formatNumber(formData.kilometres.toString()) || ""}
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-3">
+                        <label className="">Estado:</label>
                         <div
                           className="form-control"
                           style={{ backgroundColor: "#e9ecef" }}
                         >
-                          {formatNumber(formData.kilometres.toString()) || ""}
+                          {formData.state == 0 ? "En proceso" : "Finalizada"}
                         </div>
-                      )}
-                    </div>
-                    <div className="mt-3">
-                      <label className="">Estado:</label>
-                      <div
-                        className="form-control"
-                        style={{ backgroundColor: "#e9ecef" }}
-                      >
-                        {formData.state == 0 ? "En proceso" : "Finalizada"}
-                      </div>
-                    </div>
-                    <div className=" mt-3">
-                      <label className="">Creacion:</label>
-                      <div className="form-control bg-success">
-                        {formData.date_in?.split("-").reverse().join("-") || ""}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-md-6 pt-5 pt-md-0 ps-2">
-                    <h4>Datos del cliente</h4>
-                    <div>
-                      <div className=" mt-3">
-                        <label className="">Nombre/s:</label>
-                        {editing ? (
-                          <>
-                            <input
-                              type="text"
-                              {...register("name", {
-                                required: {
-                                  value: true,
-                                  message: "Campo requerido",
-                                },
-                                maxLength: {
-                                  value: 50,
-                                  message: "Longitud máxima 50",
-                                },
-                              })}
-                              className="form-control"
-                            />
-                            {errors && errors.name && (
-                              <Error error={errors.name.message} />
-                            )}
-                          </>
-                        ) : (
-                          <div
-                            className="form-control"
-                            style={{ backgroundColor: "#e9ecef" }}
-                          >
-                            {formData.name || ""}
-                          </div>
-                        )}
                       </div>
                       <div className=" mt-3">
-                        <label className="">Apellido/s:</label>
-                        {editing ? (
-                          <>
-                            <input
-                              type="text"
-                              {...register("surname", {
-                                required: {
-                                  value: true,
-                                  message: "Campo requerido",
-                                },
-                                maxLength: {
-                                  value: 50,
-                                  message: "Longitud máxima 50",
-                                },
-                              })}
-                              className="form-control"
-                            />
-                            {errors && errors.surname && (
-                              <Error error={errors.surname.message} />
-                            )}
-                          </>
-                        ) : (
-                          <div
-                            className="form-control"
-                            style={{ backgroundColor: "#e9ecef" }}
-                          >
-                            {formData.surname || ""}
-                          </div>
-                        )}
-                      </div>
-                      <div className=" mt-3">
-                        <label className="">Email:</label>
-                        {editing ? (
-                          <>
-                            <input
-                              type="text"
-                              {...register("email", {
-                                required: {
-                                  value: true,
-                                  message: "Campo requerido",
-                                },
-                                maxLength: {
-                                  value: 50,
-                                  message: "Longitud máxima 50",
-                                },
-                              })}
-                              className="form-control"
-                            />
-                            {errors && errors.email && (
-                              <Error error={errors.email.message} />
-                            )}
-                          </>
-                        ) : (
-                          <div
-                            className="form-control"
-                            style={{ backgroundColor: "#e9ecef" }}
-                          >
-                            {formData.email || ""}
-                          </div>
-                        )}
-                      </div>
-                      <div className=" mt-3">
-                        <label className="">Teléfono:</label>
-                        {editing ? (
-                          <>
-                            <input
-                              type="number"
-                              {...register("phone", {
-                                required: {
-                                  value: true,
-                                  message: "Campo requerido",
-                                },
-                                maxLength: {
-                                  value: 12,
-                                  message: "Máximo 12 números",
-                                },
-                                minLength: {
-                                  value: 6,
-                                  message: "Mínimo 6 números",
-                                },
-                              })}
-                              className="form-control"
-                            />
-                            {errors && errors.phone && (
-                              <Error error={errors.phone.message} />
-                            )}
-                          </>
-                        ) : (
-                          <div
-                            className="form-control"
-                            style={{ backgroundColor: "#e9ecef" }}
-                          >
-                            {formData.phone || ""}
-                          </div>
-                        )}
+                        <label className="">Creacion:</label>
+                        <div className="form-control bg-success">
+                          {formData.date_in?.split("-").reverse().join("-") ||
+                            ""}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="col-12 mt-3 d-flex justify-content-center gap-4">
-                  {!editing && !loading && (
-                    <button
-                      type="button"
-                      className="btn btn-warning"
-                      onClick={handleEdit}
-                    >
-                      Editar
-                    </button>
-                  )}
-                  {editing && (
-                    <>
-                      <button type="submit" className="btn btn-primary">
-                        Guardar
-                      </button>
-                      <button
-                        type="submit"
-                        onClick={handleCancelEditOrder}
-                        className="btn btn-danger text-white"
-                      >
-                        Cancelar
-                      </button>
-                    </>
-                  )}
-                  {loading && <Loader></Loader>}
-                </div>
-              </form>
-
-              <div className="mt-5 p-0">
-                <h3 className="text-center">Anomalías</h3>
-                <div className="col-xs-12 col-md-12  p-3 shadow-lg border border-1 rounded">
-                  <div>
-                    <h5>Anomalías declaradas</h5>
-                    <ul className="p-0">
-                      {loading
-                        ? "Cargando..."
-                        : formDataAnomalies.length > 0
-                        ? formDataAnomalies.map((anomaly, index) => {
-                            return (
-                              <Anomaly
-                                onSubmitAnomaly={onSubmitAnomaly}
-                                key={anomaly.id}
-                                {...anomaly}
-                                index={index}
-                                setFormDataAnomalies={setFormDataAnomalies}
-                                setAnomalies={setAnomalies}
+                    <div className="col-12 col-md-6 pt-5 pt-md-0 ps-2">
+                      <h4>Datos del cliente</h4>
+                      <div>
+                        <div className=" mt-3">
+                          <label className="">Nombre/s:</label>
+                          {editing ? (
+                            <>
+                              <input
+                                type="text"
+                                {...register("name", {
+                                  required: {
+                                    value: true,
+                                    message: "Campo requerido",
+                                  },
+                                  maxLength: {
+                                    value: 50,
+                                    message: "Longitud máxima 50",
+                                  },
+                                })}
+                                className="form-control"
                               />
-                            );
-                          })
-                        : "Esta orden no tiene anomalías asociadas"}
-                    </ul>
-                    <AddAnomaly
-                      order={order_id}
-                      setFormDataAnomalies={setFormDataAnomalies}
-                      setAnomalies={setAnomalies}
-                    />
+                              {errors && errors.name && (
+                                <Error error={errors.name.message} />
+                              )}
+                            </>
+                          ) : (
+                            <div
+                              className="form-control"
+                              style={{ backgroundColor: "#e9ecef" }}
+                            >
+                              {formData.name || ""}
+                            </div>
+                          )}
+                        </div>
+                        <div className=" mt-3">
+                          <label className="">Apellido/s:</label>
+                          {editing ? (
+                            <>
+                              <input
+                                type="text"
+                                {...register("surname", {
+                                  required: {
+                                    value: true,
+                                    message: "Campo requerido",
+                                  },
+                                  maxLength: {
+                                    value: 50,
+                                    message: "Longitud máxima 50",
+                                  },
+                                })}
+                                className="form-control"
+                              />
+                              {errors && errors.surname && (
+                                <Error error={errors.surname.message} />
+                              )}
+                            </>
+                          ) : (
+                            <div
+                              className="form-control"
+                              style={{ backgroundColor: "#e9ecef" }}
+                            >
+                              {formData.surname || ""}
+                            </div>
+                          )}
+                        </div>
+                        <div className=" mt-3">
+                          <label className="">Email:</label>
+                          {editing ? (
+                            <>
+                              <input
+                                type="text"
+                                {...register("email", {
+                                  required: {
+                                    value: true,
+                                    message: "Campo requerido",
+                                  },
+                                  maxLength: {
+                                    value: 50,
+                                    message: "Longitud máxima 50",
+                                  },
+                                })}
+                                className="form-control"
+                              />
+                              {errors && errors.email && (
+                                <Error error={errors.email.message} />
+                              )}
+                            </>
+                          ) : (
+                            <div
+                              className="form-control"
+                              style={{ backgroundColor: "#e9ecef" }}
+                            >
+                              {formData.email || ""}
+                            </div>
+                          )}
+                        </div>
+                        <div className=" mt-3">
+                          <label className="">Teléfono:</label>
+                          {editing ? (
+                            <>
+                              <input
+                                type="number"
+                                {...register("phone", {
+                                  required: {
+                                    value: true,
+                                    message: "Campo requerido",
+                                  },
+                                  maxLength: {
+                                    value: 12,
+                                    message: "Máximo 12 números",
+                                  },
+                                  minLength: {
+                                    value: 6,
+                                    message: "Mínimo 6 números",
+                                  },
+                                })}
+                                className="form-control"
+                              />
+                              {errors && errors.phone && (
+                                <Error error={errors.phone.message} />
+                              )}
+                            </>
+                          ) : (
+                            <div
+                              className="form-control"
+                              style={{ backgroundColor: "#e9ecef" }}
+                            >
+                              {formData.phone || ""}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                  <div className="col-12 mt-3 d-flex justify-content-center gap-4">
+                    {!editing && !loading && (
+                      <button
+                        type="button"
+                        className="btn btn-warning"
+                        onClick={handleEdit}
+                      >
+                        Editar
+                      </button>
+                    )}
+                    {editing && (
+                      <>
+                        <button type="submit" className="btn btn-primary">
+                          Guardar
+                        </button>
+                        <button
+                          type="submit"
+                          onClick={handleCancelEditOrder}
+                          className="btn btn-danger text-white"
+                        >
+                          Cancelar
+                        </button>
+                      </>
+                    )}
+                    {loading && <Loader></Loader>}
+                  </div>
+                </form>
+              </div>
+     
+            <div className="row mt-5">
+              <h3 className="text-center">Anomalías</h3>
+              <div className="col-xs-12 col-md-12  p-4 shadow-lg border border-1 rounded">
+                <div className="p-2">
+                  <h5>Anomalías declaradas</h5>
+                  <ul className="p-0">
+                    {loading
+                      ? "Cargando..."
+                      : formDataAnomalies.length > 0
+                      ? formDataAnomalies.map((anomaly, index) => {
+                          return (
+                            <Anomaly
+                              onSubmitAnomaly={onSubmitAnomaly}
+                              key={anomaly.id}
+                              {...anomaly}
+                              index={index}
+                              setFormDataAnomalies={setFormDataAnomalies}
+                              setAnomalies={setAnomalies}
+                            />
+                          );
+                        })
+                      : "Esta orden no tiene anomalías asociadas"}
+                  </ul>
+                  <AddAnomaly
+                    order={order_id}
+                    setFormDataAnomalies={setFormDataAnomalies}
+                    setAnomalies={setAnomalies}
+                  />
                 </div>
               </div>
             </div>
-            <div className="col-12 text-center p-4"></div>
-          </div>
-          <StudentAssigned order={order_id} />
-          <WorksAndMaterials order={order_id} />
-          <div className="col-12 d-flex justify-content-center my-5 py-4">
-            <button className="btn btn-primary" onClick={handleCloseOrder}>
-              Cerrar orden
-            </button>
+
+            <StudentAssigned order={order_id} />
+            <WorksAndMaterials order={order_id} />
+            <div className="col-12 d-flex justify-content-center my-5 py-4">
+              <button className="btn btn-primary" onClick={handleCloseOrder}>
+                Cerrar orden
+              </button>
+            </div>
           </div>
         </>
       ) : (

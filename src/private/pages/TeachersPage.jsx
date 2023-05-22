@@ -14,18 +14,19 @@ export const TeachersPage = () => {
   const { getToken } = useToken();
   useEffect(() => {
     const getTeachers = async () => {
-      try {
+
         const token = getToken();
         const url = `${BASE_URL}/teachers`;
         const headers = {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-        };
+        }
         const response = await sendRequest(url, "GET", null, headers);
-        setTeachers(response);
-      } catch (error) {
-        console.log("en el catch de getAllTEacher")
-      }
+        if(response){
+          setTeachers(response);
+        }else{
+          alert("Hubo un error en la petición, contacte con el administrador")
+        }
     };
     getTeachers();
   }, []);
@@ -45,7 +46,7 @@ export const TeachersPage = () => {
       name: "Detalle",
       selector: (row) => {
         return (
-          <Link className="btn btn-warning" to={`/orders//details`}>
+          <Link className="btn btn-warning" to={`/user/${row.id}/detail`}>
             Detalle
           </Link>
         );
@@ -54,20 +55,21 @@ export const TeachersPage = () => {
   ];
   return (
     <Main page={"teachers_page"}>
-      <div className="row shadow-lg mt-5 py-4">
+      <div className="row mt-5 text-center rounded">
         <h2>Listado de profesores</h2>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <DataTable columns={columns} data={teachers} pagination />
-        )}
-      </div>
-      <div className="row shadow-lg mt-5 py-4">
-        <div className="col-12 text-center">
-          <h2>Añadir</h2>
-          <FormAddTeacher />
+        <div className="col-12 shadow-lg p-4">
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <DataTable columns={columns} data={teachers} pagination />
+          )}
         </div>
-
+      </div>
+      <div className="row mt-5">
+        <div className="col-12 p-4 shadow-lg text-center rounded">
+          <h2>Añadir profesores</h2>
+          <FormAddTeacher setTeachers={setTeachers} />
+        </div>
       </div>
     </Main>
   );

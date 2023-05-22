@@ -59,7 +59,8 @@ export const FormCreateCar = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="col-8 mx-auto">
-        <h3>No existe un coche con esa matricula, creela.</h3>
+        <h3>No existen coincidencias.</h3>
+        <h3>¿Quiere crear un nuevo coche?</h3>
         <div className="form-group">
           <label htmlFor="formGroupExampleInput">Matrícula</label>
           <input

@@ -6,6 +6,7 @@ import useHttp from '../../hooks/useHttp'
 import { BASE_URL } from '../../api/api'
 import { useToken } from '../../hooks/useToken'
 import { Error } from '../../components/Error'
+import { NavBarStudents } from "../studentComponents/NavBarStudents";
 
 export const HomeStudent = () => {
   const { sendRequest, isLoading, error, clearError } = useHttp();
@@ -22,7 +23,6 @@ export const HomeStudent = () => {
         "Content-Type": "application/json",
       };
       const response = await sendRequest(url, "GET", null, headers)
-      console.log(response)
 
       setPendingOrders(response.pending)
       setCompletedOrders(response.finished)
@@ -53,32 +53,42 @@ export const HomeStudent = () => {
 
   return (
     <>
-      <Layout />
+      <NavBarStudents />
       <Main page={"homeStudent"}>
         <div className="row mt-3 shadow-lg p-4 rounded">
           <div className="col-12 mb-4">
             <h3>Ordenes pendientes</h3>
           </div>
           <div className="accordion accordion-flush" id="accordionFlushExample">
-            {pendingOrders.length > 0 && pendingOrders.map((order) => {
-              return (
-                <CardOrder key={order.id} {...order} order={order} handleComplete={handleComplete} error={error} clearError={clearError} />
-              )
-            })}
+            {pendingOrders.length > 0 &&
+              pendingOrders.map((order) => {
+                return (
+                  <CardOrder
+                    key={order.id}
+                    {...order}
+                    order={order}
+                    handleComplete={handleComplete}
+                    error={error}
+                    clearError={clearError}
+                  />
+                );
+              })}
           </div>
         </div>
         <div className="row mt-5 shadow-lg p-4 rounded">
           <div className="col-12 mb-4">
             <h3>Ordenes finalizados</h3>
           </div>
-          {completedOrders.length > 0 && completedOrders.map((order) => {
-            return (
-              <div key={order.id} className="row">
-                <CardOrder {...order} />
-              </div>)
-          })}
+          {completedOrders.length > 0 &&
+            completedOrders.map((order) => {
+              return (
+                <div key={order.id} className="row">
+                  <CardOrder {...order} />
+                </div>
+              );
+            })}
         </div>
       </Main>
     </>
-  )
+  );
 }

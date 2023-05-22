@@ -37,7 +37,6 @@ export const Work = ({ work, handleUpdateWork, handleDeteleWork, handleManage, w
     };
     const response = await sendRequest(url, "PUT", body, headers);
     if (response) {
-      console.log(response);
       handleUpdateWork(response);
       setIsEditing(false);
     }

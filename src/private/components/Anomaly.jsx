@@ -66,31 +66,28 @@ export const Anomaly = ({
   function handleSubmitAnomaly(data) {
     const { id, description: changedDescription } = data;
     if (description === changedDescription) {
-      console.log("entra al return");
       return setEditingAnomalies(false);
     }
     setIsSending(true);
     onSubmitAnomaly(id, validationType["sanitize"](changedDescription))
       .then((res) => {
         setIsSending(false);
-        console.log("funcona el tjen");
         return setEditingAnomalies(false);
       })
       .catch((err) => {
         setIsSending(false);
-        console.log(err);
         alert("error al actualizar");
       });
   }
 
   return (
     <>
-      <form onSubmit={handleSubmit(handleSubmitAnomaly)}>
+      <form onSubmit={handleSubmit(handleSubmitAnomaly)} className="p-0">
         <li className="d-flex my-2 gap-2">
           {editingAnomalies.id != id ? (
             <>
               <p
-                className="flex-grow-1 mb-0 p-2"
+                className="flex-grow-1 mb-0 rounded p-2"
                 style={{ backgroundColor: "#e9ecef" }}
               >
                 {description}

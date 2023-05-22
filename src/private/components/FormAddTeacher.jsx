@@ -1,60 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { useToken } from "../../hooks/useToken";
-import { useForm } from "../../hooks/useForm";
 import { BASE_URL } from "../../api/api";
 import useHttp from "../../hooks/useHttp";
 import { Loader } from "../../components/Loader";
 import { useNavigate } from "react-router-dom";
 import { Error } from "../../components/Error";
+import { useForm } from "react-hook-form";
 
-const initialForm = {
-  name: "",
-  surname: "",
-  email: "",
-  password: "",
-};
-export const FormAddTeacher = () => {
+export const FormAddTeacher = ({setTeachers}) => {
   const navigate = useNavigate();
   const { getToken } = useToken();
   const {
-    username,
-    email,
-    name,
-    surname,
-    password,
-    setFormState,
-    onInputChange,
-    onResetForm,
-  } = useForm(initialForm);
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    getValues,
+    reset
+  } = useForm();
   const { sendRequest, isLoading, error, clearError } = useHttp();
+  const [successMessage, setSuccessMessage] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (name == "" || surname == "" || email == "") {
-      return false;
-    }
+  const onSubmit = async (data) => {
     const token = getToken();
     const url = `${BASE_URL}/user/createTeacher`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
-    const data = {
-      name,
-      surname,
-      email,
-      password,
+    const body = {
+      name: data.name.trim(),
+      surname: data.surname.trim(),
+      email: data.email.trim(),
+      password: data.password.trim(),
     };
-    const body = JSON.stringify(data);
-    const response = await sendRequest(url, "POST", body, headers);
+
+    const response = await sendRequest(
+      url,
+      "POST",
+      JSON.stringify(body),
+      headers
+    );
     if (response) {
-      onResetForm();
-      navigate("/teachers");
+      setSuccessMessage(response.message)
+      setTeachers(prev => [...prev, response.user])
+      reset();
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <h3 className="form-label text-start">Datos del profesor</h3>
       <div className="row mt-2">
         <div className="col-12 col-md-6">
@@ -64,12 +60,25 @@ export const FormAddTeacher = () => {
           <input
             type="text"
             className="form-control"
-            id="name"
-            value={name}
-            name="name"
-            onChange={onInputChange}
+            {...register("name", {
+              required: {
+                value: true,
+                message: "El nombre es requerido",
+              },
+              minLength: {
+                value: 3,
+                message: "El nombre debe tener al menos 3 caracteres",
+              },
+              maxLength: {
+                value: 20,
+                message: "El nombre debe tener menos de 20 caracteres",
+              },
+            })}
           />
-          {error && error.name && <Error error={error.name} clearError={clearError} />}
+          {errors && errors.name && <Error error={errors.name.message} />}
+          {error && error.name && (
+            <Error error={error.name} clearError={clearError} />
+          )}
         </div>
 
         <div className="col-12 col-md-6">
@@ -79,13 +88,25 @@ export const FormAddTeacher = () => {
           <input
             type="text"
             className="form-control"
-            id="surname"
-            value={surname}
-            name="surname"
-            onChange={onInputChange}
+            {...register("surname", {
+              required: {
+                value: true,
+                message: "El apellido es requerido",
+              },
+              minLength: {
+                value: 3,
+                message: "El apellido debe tener al menos 3 caracteres",
+              },
+              maxLength: {
+                value: 20,
+                message: "El apellido debe tener menos de 20 caracteres",
+              },
+            })}
           />
-          {error && error.surname && <Error error={error.surname} clearError={clearError} />}
-
+          {errors && errors.surname && <Error error={errors.surname.message} />}
+          {error && error.surname && (
+            <Error error={error.surname} clearError={clearError} />
+          )}
         </div>
       </div>
       <div className="row mt-3">
@@ -94,14 +115,31 @@ export const FormAddTeacher = () => {
             Email*
           </label>
           <input
-            type="email"
+            type="text"
             className="form-control"
-            id="name"
-            name="email"
-            onChange={onInputChange}
-            value={email}
+            {...register("email", {
+              required: {
+                value: true,
+                message: "El email es requerido",
+              },
+              minLength: {
+                value: 3,
+                message: "El email debe tener al menos 3 caracteres",
+              },
+              maxLength: {
+                value: 20,
+                message: "El email debe tener menos de 20 caracteres",
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                message: "El email invalido",
+              },
+            })}
           />
-          {error && error.email && <Error error={error.email} clearError={clearError} />}
+          {errors && errors.email && <Error error={errors.email.message} />}
+          {error && error.email && (
+            <Error error={error.email} clearError={clearError} />
+          )}
         </div>
         <div className="col-12 col-md-6">
           <label htmlFor="name" className="form-label">
@@ -110,31 +148,40 @@ export const FormAddTeacher = () => {
           <input
             type="password"
             className="form-control"
-            id="name"
-            name="password"
-            onChange={onInputChange}
-            value={password}
+            {...register("password", {
+              required: {
+                value: true,
+                message: "La contraseña es requerida",
+              },
+              minLength: {
+                value: 6,
+                message: "La contraseña debe tener al menos 6 caracteres",
+              },
+              maxLength: {
+                value: 16,
+                message: "La contraseña debe tener máximo 16 caracteres",
+              },
+            })}
           />
-          {error && error.password && <Error error={error.password} clearError={clearError} />}
+          {errors && errors.password && <Error error={errors.password.message} />}
+          {error && error.password && (
+            <Error error={error.password} clearError={clearError} />
+          )}
         </div>
       </div>
-
+      {successMessage && (
+        <div className="alert alert-info" role="alert">
+          {successMessage}
+        </div>
+      )}
       {isLoading ? (
         <Loader />
       ) : (
         <div className="col-12 text-center mt-3">
-          <button
-            type="submit"
-            className={
-              name == "" || surname == "" || email == "" || username == ""
-                ? "btn btn-primary mt-3 disabled"
-                : "btn btn-primary mt-3 "
-            }
-          >
+          <button type="submit" className={"btn btn-primary mt-3"}>
             Agregar
           </button>
         </div>
-
       )}
     </form>
   );

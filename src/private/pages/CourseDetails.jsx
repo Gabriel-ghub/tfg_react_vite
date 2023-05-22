@@ -20,33 +20,28 @@ export const CourseDetails = () => {
 
   useEffect(() => {
     const getCourse = async () => {
-      try {
-        const url = `${BASE_URL}/course/${course_id}`;
-        const token = getToken();
-        const headers = {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        };
-
-        const response = await sendRequest(url, "GET", null, headers);
+      const url = `${BASE_URL}/course/${course_id}`;
+      const token = getToken();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+      const response = await sendRequest(url, "GET", null, headers);
+      if (response) {
         setCourse(response);
-      } catch (error) {
-        console.log(error);
       }
     };
     const getStudents = async () => {
-      try {
-        const url = `${BASE_URL}/course/${course_id}/students`;
-        const token = getToken();
-        const headers = {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        };
+      const url = `${BASE_URL}/course/${course_id}/students`;
+      const token = getToken();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
 
-        const response = await sendRequest(url, "GET", null, headers);
+      const response = await sendRequest(url, "GET", null, headers);
+      if (response) {
         setStudents(response);
-      } catch (error) {
-        console.log(error);
       }
     };
     getCourse();
@@ -66,7 +61,7 @@ export const CourseDetails = () => {
       name: "Detalle",
       selector: (row) => {
         return (
-          <Link className="btn btn-warning" to={`/course/${row.id}/detail`}>
+          <Link className="btn btn-warning" to={`/user/${row.id}/detail`}>
             Detalle
           </Link>
         );
@@ -74,9 +69,7 @@ export const CourseDetails = () => {
     },
   ];
 
-  const handleChange = (state) => {
-    console.log(state.selectedRows);
-  };
+
 
   return (
     <>
@@ -84,22 +77,11 @@ export const CourseDetails = () => {
         <Loader />
       ) : (
         <div className="container">
+          <Link className="btn btn-primary mt-5" to="/courses">Volver</Link>
           <div className="row mt-5 shadow-lg py-3">
             <div className="col-12 d-flex justify-content-center">
               <FormEditCourse course={course} setCourse={setCourse} />
             </div>
-            {students.length > 0 && (
-              <div className="col-12 py-3 mt-2">
-                <h3>Alumnos matriculados</h3>
-                <DataTable
-                  columns={columns}
-                  data={students}
-                  selectableRows
-                  onSelectedRowsChange={handleChange}
-                  pagination
-                />
-              </div>
-            )}
           </div>
         </div>
       )}

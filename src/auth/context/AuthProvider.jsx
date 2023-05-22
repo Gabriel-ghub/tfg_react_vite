@@ -105,12 +105,10 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json()
       localStorage.setItem("token", JSON.stringify(data.access_token))
     } catch (error) {
-      console.log(error)
     }
   }
 
   const onLogout = () => {
-    console.log("logout, deberia limpiarse")
 
     clearInterval(refresh)
     refresh = 0;

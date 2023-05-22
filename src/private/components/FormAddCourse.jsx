@@ -28,7 +28,6 @@ export const FormAddCourse = ({ courses, setCourses }) => {
       year: data.year.trim(),
     };
     const token = getToken();
-    console.log(token);
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -44,11 +43,10 @@ export const FormAddCourse = ({ courses, setCourses }) => {
       setCourses([...courses, response]);
       reset();
     }
-    console.log(error);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="d-flex gap-2 col-12 col-md-6">
       <label className="form-label">Datos del curso</label>
       <label htmlFor="name" className="form-label">
         Nombre
@@ -102,7 +100,7 @@ export const FormAddCourse = ({ courses, setCourses }) => {
       )}
       {isLoading && <Loader></Loader>}
       {!isLoading && (
-        <div className="col">
+        <div className="col-12 d-flex justify-content-center">
           <button type="submit" className="btn btn-primary mt-3">
             Agregar
           </button>

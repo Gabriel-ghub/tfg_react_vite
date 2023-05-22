@@ -70,7 +70,6 @@ export const OrderProvider = ({ children }) => {
        
       const response2 = await sendRequest(url_anomaly, "POST", body, headers)
       if(response2){
-        console.log("Lllega hasta ca  ")
         navigate(`/orders/${response2}/details`);
       }else{
         dispatch({ type: orderTypes.order_failure, payload: "Error en la peticion" });
@@ -79,52 +78,6 @@ export const OrderProvider = ({ children }) => {
     }else{
       dispatch({ type: orderTypes.order_failure, payload: "Error en la peticion" });
     }
-
-    // fetch(url_order, {
-    //   method: "POST",
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(order),
-    // })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error(response.statusText);
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((res) => {
-    //     dispatch({ type: orderTypes.order_success, payload: res.data });
-    //     let data = anomalies.map((anomaly) => {
-    //       return anomaly.description;
-    //     });
-    //     let data_anomalias = {
-    //       anomalias: data,
-    //       order_id: res.data.id,
-    //     };
-    //     fetch(url_anomaly, {
-    //       method: "POST",
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(data_anomalias),
-    //     })
-    //       .then((res) => {
-    //         return res.json();
-    //       })
-    //       .then((res) => {
-    //         console.log("el paramtro que llega de order id es")
-    //         console.log("estas en la respuesta de la api")
-    //         console.log(res);
-    //         navigate(`/orders/${res}/details`);
-    //       })
-    //       .catch((err) => console.log(err));
-    //   })
-    //   .catch((error) => {
-    //     dispatch({ type: orderTypes.order_failure, payload: error.message });
-    //   });
   }
 
   return (

@@ -3,7 +3,6 @@ import { StudentsPage } from "../pages/StudentsPage";
 import { HomeStudent } from "../studentPages/HomeStudent";
 
 export const StudentRouterApp = () => {
-  console.log("pasa por aca");
   return (
     <>
       <Routes>

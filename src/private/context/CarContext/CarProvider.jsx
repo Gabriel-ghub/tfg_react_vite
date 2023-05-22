@@ -28,7 +28,6 @@ export const CarProvider = ({ children }) => {
   };
 
   const carNotFound = () => {
-    console.log("viene por aca carNotFound");
     const action = {
       type: carTypes.error,
     };
@@ -67,7 +66,6 @@ export const CarProvider = ({ children }) => {
       model,
       id,
     };
-    console.log(data);
     const action = {
       type: carTypes.car_create,
       payload: data,

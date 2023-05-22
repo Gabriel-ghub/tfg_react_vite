@@ -16,7 +16,6 @@ export const AppRouter = () => {
   const { get_decoded_token } = useToken(token);
   let role_id = null;
   if (isAuthenticated) {
-    // console.log("SE ejcuta el isAutenticated del apppROuter")
     const token_decoded = get_decoded_token();
     role_id = token_decoded != undefined ? token_decoded.user.role_id : null;
   }

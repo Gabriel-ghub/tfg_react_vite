@@ -3,7 +3,6 @@ import { carTypes } from "./types/carTypes";
 export const carReducer = (state = {}, action) => {
   switch (action.type) {
     case carTypes.car_success:
-      console.log("entra al succes");
       return {
         ...state,
         ...action.payload,
@@ -19,7 +18,6 @@ export const carReducer = (state = {}, action) => {
         found: false,
       };
     case carTypes.car_failure:
-      console.log("entra al failure");
       return {
         ...state,
         isLoading: false,
@@ -28,7 +26,6 @@ export const carReducer = (state = {}, action) => {
         error: action.payload,
       };
     case carTypes.car_create:
-      console.log("entra al create");
       return {
         ...state,
         ...action.payload,
