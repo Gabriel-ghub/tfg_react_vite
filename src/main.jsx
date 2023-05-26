@@ -8,7 +8,7 @@ import "./styles/styles.css";
 import * as bootstrap from "bootstrap";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
+  <BrowserRouter basename='/tfg_front'>
     <App />
   </BrowserRouter>
 );
