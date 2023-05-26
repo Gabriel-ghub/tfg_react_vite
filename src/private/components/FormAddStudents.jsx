@@ -9,7 +9,7 @@ import { validationType } from "../../validations/validator";
 import { Error } from "../../components/Error";
 import Select from "react-select";
 
-export const FormAddStudents = ({ options, resetSelect }) => {
+export const FormAddStudents = ({ options}) => {
   const {
     register,
     handleSubmit,

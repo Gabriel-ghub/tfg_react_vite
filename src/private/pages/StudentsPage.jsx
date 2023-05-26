@@ -34,7 +34,7 @@ export const StudentsPage = () => {
       if (response) {
         const options = response.map((course) => {
           return { value: course.id, label: `${course.name}(${course.year})` };
-        })
+        });
         setOptions(options);
       }
     };
@@ -42,16 +42,16 @@ export const StudentsPage = () => {
   }, []);
 
   const handleSetCourse = async (course_id) => {
-      const url = `${BASE_URL}/course/${course_id}/students`;
-      const token = getToken();
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-      const response = await sendRequest(url, "GET", null, headers);
-      if(response){
-        setStudents(response);
-      }
+    const url = `${BASE_URL}/course/${course_id}/students`;
+    const token = getToken();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const response = await sendRequest(url, "GET", null, headers);
+    if (response) {
+      setStudents(response);
+    }
     setCourseId(course_id);
   };
 
@@ -80,11 +80,11 @@ export const StudentsPage = () => {
     setSelectedOption(data);
     setCourseId(data.value);
     handleSetCourse(data.value);
-  }
+  };
 
-  const resetSelect = ()=>{
+  const resetSelect = () => {
     setSelectedOption(null);
-  }
+  };
   return (
     <Main page={"students_page"}>
       <div className="row mt-5">
@@ -109,67 +109,73 @@ export const StudentsPage = () => {
           </div>
         </div>
       </div>
+
       <div className="row mt-5">
         <h2 className="text-center">Agregar nuevo alumno</h2>
-        <div className="mb-3 col-12 shadow-lg p-4">
-          <div className="accordion accordion-flush" id="accordionFlushExample">
-            <div className="accordion-item">
-              <h2 className="accordion-header" id="flush-headingOne">
-                <button
-                  className="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#flush-collapseOne"
-                  aria-expanded="false"
-                  aria-controls="flush-collapseOne"
+        {isLoading && <Loader />} 
+        {options.length > 0 && (
+          <div className="mb-3 col-12 shadow-lg p-4">
+            <div
+              className="accordion accordion-flush"
+              id="accordionFlushExample"
+            >
+              <div className="accordion-item">
+                <h2 className="accordion-header" id="flush-headingOne">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseOne"
+                    aria-expanded="false"
+                    aria-controls="flush-collapseOne"
+                  >
+                    Datos
+                  </button>
+                </h2>
+                <div
+                  id="flush-collapseOne"
+                  className="accordion-collapse collapse"
+                  aria-labelledby="flush-headingOne"
+                  data-bs-parent="#accordionFlushExample"
                 >
-                  Datos
-                </button>
-              </h2>
-              <div
-                id="flush-collapseOne"
-                className="accordion-collapse collapse"
-                aria-labelledby="flush-headingOne"
-                data-bs-parent="#accordionFlushExample"
-              >
-                <div className="accordion-body">
-                  {options.length > 0 ? (
-                    <FormAddStudents
-                      resetSelect={resetSelect}
-                      options={options}
-                    ></FormAddStudents>
-                  ) : null}
+                  <div className="accordion-body">
+                    {options.length > 0 ? (
+                      <FormAddStudents options={options}></FormAddStudents>
+                    ) : null}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="accordion-item">
-              <h2 className="accordion-header" id="flush-headingTwo">
-                <button
-                  className="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#flush-collapseTwo"
-                  aria-expanded="false"
-                  aria-controls="flush-collapseTwo"
+              <div className="accordion-item">
+                <h2 className="accordion-header" id="flush-headingTwo">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseTwo"
+                    aria-expanded="false"
+                    aria-controls="flush-collapseTwo"
+                  >
+                    Mediante fichero CSV
+                  </button>
+                </h2>
+                <div
+                  id="flush-collapseTwo"
+                  className="accordion-collapse collapse"
+                  aria-labelledby="flush-headingTwo"
+                  data-bs-parent="#accordionFlushExample"
                 >
-                  Mediante fichero CSV
-                </button>
-              </h2>
-              <div
-                id="flush-collapseTwo"
-                className="accordion-collapse collapse"
-                aria-labelledby="flush-headingTwo"
-                data-bs-parent="#accordionFlushExample"
-              >
-                <div className="accordion-body">
-                  {courses.length > 0 ? (
-                    <FormAddStudentsCSV courses={courses}></FormAddStudentsCSV>
-                  ) : null}
+                  <div className="accordion-body">
+                    {courses.length > 0 ? (
+                      <FormAddStudentsCSV
+                        options={options}
+                      ></FormAddStudentsCSV>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </Main>
   );

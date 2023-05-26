@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import uuid from "react-uuid";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import { useForm } from "../../hooks/useForm";
 import { CarContext } from "../context/CarContext/CarContext";
 import { OrderContext } from "../context/OrderContext/OrderContext";
 import { Main } from "../components/global/Main";
@@ -10,18 +9,12 @@ import { Loader } from "../../components/Loader";
 import { validationType } from "../../validations/validator";
 import { Error } from "../../components/Error";
 import { useForm } from "react-hook-form";
-
 export const CreateOrder = () => {
   const { plate_car } = useParams();
   const { id, carInit, getCarInfo } = useContext(CarContext);
   const { handleCreateOrder, isLoading, error, clearError } =
     useContext(OrderContext);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm({ defaultValues: initalForm });
+  const { register, handleSubmit, formState: { errors }, setValue, } = useForm();
   const [newAnomaly, setNewAnomaly] = useState("");
   const [errorsEmpty, setErrorsEmpty] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +22,6 @@ export const CreateOrder = () => {
 
   useEffect(() => {
     getCarInfo(plate_car);
-    
   }, []);
 
   const addAnomaly = (e) => {
@@ -82,6 +74,8 @@ export const CreateOrder = () => {
       car_id: id,
       date_in: formattedDate,
       kilometres: data.kilometres.replace(/\./g, ""),
+      name: validationType["validateName"](data.name),
+      surname: validationType["validateName"](data.surname),
     };
     setErrorsEmpty("");
     handleCreateOrder(body, anomalies);
@@ -90,7 +84,7 @@ export const CreateOrder = () => {
     <Main page={"create_page"}>
       <div className="container">
         <h3 className="color--white mb-5 mt-5 p-3 text-white text-center bg-success rounded-3">
-          Orden para la matrícula{" "}
+          Orden para la matrícula
           <span className="text-danger">{plate_car}</span>
         </h3>
         <form
@@ -117,9 +111,11 @@ export const CreateOrder = () => {
                             value: 50,
                             message: "Máximo 50 caracteres",
                           },
-                          minLength: {
-                            value: 5,
-                            message: "Mínimo 5 caracteres",
+                          pattern: {
+                            value:
+                              /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+                            message:
+                              "Solo letras",
                           },
                         })}
                       />
@@ -149,9 +145,11 @@ export const CreateOrder = () => {
                             value: 50,
                             message: "Máximo 50 caracteres",
                           },
-                          minLength: {
-                            value: 3,
-                            message: "Mínimo 3 caracteres",
+                          pattern: {
+                            value:
+                              /^^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+                            message:
+                              "Solo letras",
                           },
                         })}
                       />
@@ -166,23 +164,15 @@ export const CreateOrder = () => {
 
                   <div className="col-sm-6 mb-3">
                     <div className="form-group">
-                      <label htmlFor="phone">Teléfono*</label>
+                      <label htmlFor="phone">Teléfono</label>
                       <input
                         maxLength={"12"}
-                        type="number"
+                        type="text"
                         className="form-control"
                         {...register("phone", {
-                          required: {
-                            value: true,
-                            message: "Campo requerido",
-                          },
-                          maxLength: {
-                            value: 12,
-                            message: "Máximo 12 caracteres",
-                          },
-                          minLength: {
-                            value: 7,
-                            message: "Mínimo 7 caracteres",
+                          pattern: {
+                            value: /^(?:[0-9]+|)$/,
+                            message: "Solo números",
                           },
                         })}
                       />
@@ -196,22 +186,15 @@ export const CreateOrder = () => {
                   </div>
                   <div className="col-sm-6 mb-3">
                     <div className="form-group">
-                      <label htmlFor="phone">Email*</label>
+                      <label htmlFor="phone">Email</label>
                       <input
                         type="email"
                         className="form-control"
                         {...register("email", {
-                          required: {
-                            value: true,
-                            message: "Campo requerido",
-                          },
-                          maxLength: {
-                            value: 50,
-                            message: "Máximo 50 caracteres",
-                          },
-                          minLength: {
-                            value: 3,
-                            message: "Mínimo 5 caracteres",
+                          pattern: {
+                            value:
+                              /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                            message: "Email inválido",
                           },
                         })}
                       />

@@ -5,36 +5,27 @@ import { Loader } from "../../components/Loader";
 import useHttp from "../../hooks/useHttp";
 import { Main } from "../components/global/Main";
 import DataTable from "react-data-table-component";
-import Export from "react-data-table-component";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
-// import { useForm } from "../../hooks/useForm";
 import { Error } from "../../components/Error";
-import { validationType } from "../../validations/validator";
 import { useForm } from "react-hook-form";
-import { CardOrder } from "../studentComponents/CardOrder";
 
 export const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [mensaje, setMensaje] = useState(false);
   const { isLoading, sendRequest, clearError, error, setIsLoading } = useHttp();
 
-  // const { plate, onInputChange, onResetForm } = useForm({
-  //   plate: ""
-  // })
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     setValue,
-    getValues,
   } = useForm();
   const { getToken } = useToken();
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = getToken();
     setMensaje(false);
 
     const fetchData = async () => {
@@ -51,31 +42,6 @@ export const OrdersPage = () => {
     };
     fetchData();
   }, []);
-
-  // const handleChangePlate = (e) =>{
-  //   if(!validationType["isSafe"](e.target.value) || !validationType["length"](e.target.value,11)){
-  //     return false
-  //   }
-  //   onInputChange(e)
-  // }
-
-  // const handleSearchPlate = async (e) => {
-  //   e.preventDefault();
-  //   if (plate == "") return
-
-  //   const url = `${BASE_URL}/order/${plate}`
-  //   const token = getToken();
-  //   const headers = {
-  //     Authorization: `Bearer ${token}`
-  //   }
-  //   const response = await sendRequest(url, "GET", null, headers)
-  //   if (response) {
-  //     setCarOrders(response)
-  //     onResetForm();
-  //   } else {
-  //     setCarOrders([])
-  //   }
-  // }
 
   const handleCleanForm = () => {
     setFiltered([]);
@@ -158,40 +124,32 @@ export const OrdersPage = () => {
     },
   ];
   const onSubmit = async (data) => {
-    setIsLoading(true);
-    setMensaje(false);
-
-    switch (data.filter) {
-      case "plate":
-        const filter_orders = orders.filter(
-          (order) => order.plate === data.value
-        );
-        filter_orders.length === 0
-          ? setMensaje("No se ha encontrado ningún resultado")
-          : setFiltered(filter_orders);
-        break;
-      case "name":
-        //filter orders where name to lower case contains data.value to lower case
-        const filter_orders_name = orders.filter((order) =>
-          order.name.toLowerCase().includes(data.value.toLowerCase())
-        );
-        filter_orders_name.length === 0
-          ? setMensaje("No se ha encontrado ningún resultado")
-          : setFiltered(filter_orders_name);
-        break;
-      case "surname":
-        const filter_orders_surname = orders.filter(
-          (order) => order.surname === data.value
-        );
-        filter_orders_surname.length === 0
-          ? setMensaje("No se ha encontrado ningún resultado")
-          : setFiltered(filter_orders_surname);
-        break;
-      default:
-        setMensaje("No se ha encontrado ningún resultado");
-        return setOrders(orders);
+    console.log(data);
+    setFiltered([]);
+    let orders_result = false;
+    if (data.filter == "plate") {
+      const filtered = orders.filter((order) => order.plate == data.value);
+      if (filtered.length > 0) {
+        orders_result = filtered;
+      }
+    } else if (data.filter == "name") {
+      const filtered = orders.filter((order) =>
+        order.name.toLowerCase().includes(data.value.toLowerCase())
+      );
+      if (filtered.length > 0) {
+        orders_result = filtered;
+      }
+    } else if (data.filter == "surname") {
+      const filtered = orders.filter((order) =>
+        order.surname.toLowerCase().includes(data.value.toLowerCase())
+      );
+      if (filtered.length > 0) {
+        orders_result = filtered;
+      }
     }
-    setIsLoading(false);
+    if (!orders_result) {
+      setMensaje("No se encontraron resultados");
+    }
   };
 
   return (
@@ -213,14 +171,13 @@ export const OrdersPage = () => {
                     Matricula
                   </option>
                   <option value="name">Nombre</option>
-                  <option value="surnname">Apellido</option>
+                  <option value="surname">Apellido</option>
                 </select>
               </div>
-
-              {errors && errors.plate && (
-                <p className="my-1">{errors.plate.message}</p>
+              {mensaje && <Error error={mensaje} />}
+              {errors && errors.value && (
+                <p className="my-1">{errors.value.message}</p>
               )}
-              {/* {error && error.plate && <Error error={error.plate} clearError={clearError}/>} */}
               {isLoading ? (
                 <Loader />
               ) : (
@@ -234,13 +191,9 @@ export const OrdersPage = () => {
                 </div>
               )}
             </form>
-            {isLoading ? (
-              <Loader></Loader>
-            ) : mensaje ? (
-              <p>Error al cargar los datos</p>
-            ) : orders.length === 0 ? (
-              <p>No se encontraron resultados</p>
-            ) : (
+            {isLoading && <Loader></Loader>}
+
+            {!isLoading && orders.length > 0 && (
               <DataTable
                 columns={columns}
                 data={filtered.length > 0 ? filtered : orders}

@@ -1,42 +1,25 @@
-import React, { useContext, useState } from "react";
-import { useForm } from "../../hooks/useForm";
+import React, { useContext } from "react";
 import { CarContext } from "../context/CarContext/CarContext";
-import { validationType } from "../../validations/validator";
-
-
-const initalForm = {
-  matricula: "",
-};
-
+import { useForm } from "react-hook-form";
+import { Error } from "../../components/Error";
 export const FormSearchCar = () => {
-  const { matricula, onInputChange } = useForm(initalForm);
   const {
-    getCarInfo,
-    isLoading,
-  } = useContext(CarContext);
-  const [validationError, setValidationError] = useState(false)
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
+  const { getCarInfo, isLoading } = useContext(CarContext);
 
-  const handleChangePlate = (e) =>{
-    if(!(validationType["length"](e.target.value,11) &&validationType["textandnumber"](e.target.value,11))){
-      return false
-    }
-    onInputChange(e)
-  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const regex = /^[a-zA-Z0-9]+$/g;
-    if (regex.test(matricula)) {
-      getCarInfo(matricula);
-    } else {
-      setValidationError("Error en matrícula, solo puede ingresar numeros y letras")
-    }
+  const onSubmit = (data) => {
+    getCarInfo(data.plate);
   };
 
   return (
     <>
       <form
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={handleSubmit(onSubmit)}
         className="align-items-center justify-content-center col-8 mx-auto"
       >
         <div className="form-group d-flex flex-column col-12 text-center">
@@ -46,24 +29,29 @@ export const FormSearchCar = () => {
           <input
             className="form-control mt-3 text-center"
             type="text"
-            value={matricula}
-            name="matricula"
-            onChange={handleChangePlate}
+            {...register("plate", {
+              required: { value: true, message: "Debe ingresar una matrícula" },
+              maxLength: {
+                value: 11,
+                message: "Máximo 11 caracteres",
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9]+$/,
+                message: "Solo se permiten letras y números sin espacios",
+              },
+            })}
           />
+          {errors && errors.plate && <Error error={errors.plate.message} />}
           {!isLoading && (
             <button
-              onClick={handleSubmit}
               type="submit"
               className="btn btn-primary mx-auto mt-3"
-              disabled={(matricula == "")}
             >
               Buscar
             </button>
           )}
         </div>
       </form>
-      {validationError && (<div class="alert alert-danger" role="alert">{validationError}</div>
-      )}
     </>
   );
 };

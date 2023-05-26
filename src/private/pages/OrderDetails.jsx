@@ -183,61 +183,113 @@ export const OrderDetails = () => {
         <Loader />
       ) : formData.state === 0 ? (
         <>
-        <Link to="/orders" className="btn btn-primary">Volver</Link>
+          <Link to="/orders" className="btn btn-primary">
+            Volver
+          </Link>
           <div id="main" className="container">
             <div className="row mt-5" id="real-estates-detail">
               <h3 className="text-center">Detalles de la orden</h3>
 
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  className="p-3 shadow-lg border border-1 rounded"
-                >
-                  <div className="row p-3">
-                    <h4 className="d-inline-block">
-                      {plate && `Matrícula: ${plate}`}
-                    </h4>
-                  </div>
-                  <div className="row p-3">
-                    <div className="col-12 col-md-6 pe-2">
-                      <h4>Datos de la orden</h4>
-                      <div className=" mt-3">
-                        <label className="">ID de orden:</label>
-                        <div className="form-control bg-success">
-                          {formData.id}
-                        </div>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="p-3 shadow-lg border border-1 rounded"
+              >
+                <div className="row p-3">
+                  <h4 className="d-inline-block">
+                    {plate && `Matrícula: ${plate}`}
+                  </h4>
+                </div>
+                <div className="row p-3">
+                  <div className="col-12 col-md-6 pe-2">
+                    <h4>Datos de la orden</h4>
+                    <div className=" mt-3">
+                      <label className="">ID de orden:</label>
+                      <div className="form-control bg-success">
+                        {formData.id}
                       </div>
-                      <div className="mt-3">
-                        <label className=""> Kilometros:</label>
+                    </div>
+                    <div className="mt-3">
+                      <label className=""> Kilometros:</label>
+                      {editing ? (
+                        <>
+                          <input
+                            type="text"
+                            maxLength="10"
+                            {...register("kilometres", {
+                              required: {
+                                value: true,
+                                message: "Campo requerido",
+                              },
+                              maxLength: {
+                                value: 10,
+                                message: "Longitud maxima 10 caracteres",
+                              },
+                              minLength: {
+                                value: 1,
+                                message: "Longitud minima 1 caracter",
+                              },
+                            })}
+                            className="form-control"
+                            onChange={handleKilometresChange}
+                          />
+                          {error && error.kilometres && (
+                            <Error
+                              error={error.kilometres}
+                              clearError={clearError}
+                            />
+                          )}
+                          {errors && errors.kilometres && (
+                            <Error error={errors.kilometres.message} />
+                          )}
+                        </>
+                      ) : (
+                        <div
+                          className="form-control"
+                          style={{ backgroundColor: "#e9ecef" }}
+                        >
+                          {formatNumber(formData.kilometres.toString()) || ""}
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-3">
+                      <label className="">Estado:</label>
+                      <div
+                        className="form-control"
+                        style={{ backgroundColor: "#e9ecef" }}
+                      >
+                        {formData.state == 0 ? "En proceso" : "Finalizada"}
+                      </div>
+                    </div>
+                    <div className=" mt-3">
+                      <label className="">Creacion:</label>
+                      <div className="form-control bg-success">
+                        {formData.date_in?.split("-").reverse().join("-") || ""}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-6 pt-5 pt-md-0 ps-2">
+                    <h4>Datos del cliente</h4>
+                    <div>
+                      <div className=" mt-3">
+                        <label className="">Nombre/s:</label>
                         {editing ? (
                           <>
                             <input
                               type="text"
-                              maxLength="10"
-                              {...register("kilometres", {
+                              {...register("name", {
                                 required: {
                                   value: true,
                                   message: "Campo requerido",
                                 },
                                 maxLength: {
-                                  value: 10,
-                                  message: "Longitud maxima 10 caracteres",
-                                },
-                                minLength: {
-                                  value: 1,
-                                  message: "Longitud minima 1 caracter",
+                                  value: 50,
+                                  message: "Longitud máxima 50",
                                 },
                               })}
                               className="form-control"
-                              onChange={handleKilometresChange}
                             />
-                            {error && error.kilometres && (
-                              <Error
-                                error={error.kilometres}
-                                clearError={clearError}
-                              />
-                            )}
-                            {errors && errors.kilometres && (
-                              <Error error={errors.kilometres.message} />
+                            {errors && errors.name && (
+                              <Error error={errors.name.message} />
                             )}
                           </>
                         ) : (
@@ -245,190 +297,129 @@ export const OrderDetails = () => {
                             className="form-control"
                             style={{ backgroundColor: "#e9ecef" }}
                           >
-                            {formatNumber(formData.kilometres.toString()) || ""}
+                            {formData.name || ""}
                           </div>
                         )}
                       </div>
-                      <div className="mt-3">
-                        <label className="">Estado:</label>
-                        <div
-                          className="form-control"
-                          style={{ backgroundColor: "#e9ecef" }}
-                        >
-                          {formData.state == 0 ? "En proceso" : "Finalizada"}
-                        </div>
+                      <div className=" mt-3">
+                        <label className="">Apellido/s:</label>
+                        {editing ? (
+                          <>
+                            <input
+                              type="text"
+                              {...register("surname", {
+                                required: {
+                                  value: true,
+                                  message: "Campo requerido",
+                                },
+                                maxLength: {
+                                  value: 50,
+                                  message: "Longitud máxima 50",
+                                },
+                              })}
+                              className="form-control"
+                            />
+                            {errors && errors.surname && (
+                              <Error error={errors.surname.message} />
+                            )}
+                          </>
+                        ) : (
+                          <div
+                            className="form-control"
+                            style={{ backgroundColor: "#e9ecef" }}
+                          >
+                            {formData.surname || ""}
+                          </div>
+                        )}
                       </div>
                       <div className=" mt-3">
-                        <label className="">Creacion:</label>
-                        <div className="form-control bg-success">
-                          {formData.date_in?.split("-").reverse().join("-") ||
-                            ""}
-                        </div>
+                        <label className="">Email:</label>
+                        {editing ? (
+                          <>
+                            <input
+                              type="email"
+                              {...register("email", {
+                                pattern: {
+                                  value:
+                                    /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                                  message: "Email inválido",
+                                },
+                              })}
+                              className="form-control"
+                            />
+                            {errors && errors.email && (
+                              <Error error={errors.email.message} />
+                            )}
+                          </>
+                        ) : (
+                          <div
+                            className="form-control"
+                            style={{ backgroundColor: "#e9ecef" }}
+                          >
+                            {formData.email || "No especificado"}
+                          </div>
+                        )}
                       </div>
-                    </div>
-                    <div className="col-12 col-md-6 pt-5 pt-md-0 ps-2">
-                      <h4>Datos del cliente</h4>
-                      <div>
-                        <div className=" mt-3">
-                          <label className="">Nombre/s:</label>
-                          {editing ? (
-                            <>
-                              <input
-                                type="text"
-                                {...register("name", {
-                                  required: {
-                                    value: true,
-                                    message: "Campo requerido",
-                                  },
-                                  maxLength: {
-                                    value: 50,
-                                    message: "Longitud máxima 50",
-                                  },
-                                })}
-                                className="form-control"
-                              />
-                              {errors && errors.name && (
-                                <Error error={errors.name.message} />
-                              )}
-                            </>
-                          ) : (
-                            <div
+                      <div className=" mt-3">
+                        <label className="">Teléfono:</label>
+                        {editing ? (
+                          <>
+                            <input
+                              type="text"
+                              {...register("phone", {
+                                pattern: {
+                                  value: /^[0-9]*$/,
+                                  message: "Solo se permiten números",
+                                },
+                              })}
                               className="form-control"
-                              style={{ backgroundColor: "#e9ecef" }}
-                            >
-                              {formData.name || ""}
-                            </div>
-                          )}
-                        </div>
-                        <div className=" mt-3">
-                          <label className="">Apellido/s:</label>
-                          {editing ? (
-                            <>
-                              <input
-                                type="text"
-                                {...register("surname", {
-                                  required: {
-                                    value: true,
-                                    message: "Campo requerido",
-                                  },
-                                  maxLength: {
-                                    value: 50,
-                                    message: "Longitud máxima 50",
-                                  },
-                                })}
-                                className="form-control"
-                              />
-                              {errors && errors.surname && (
-                                <Error error={errors.surname.message} />
-                              )}
-                            </>
-                          ) : (
-                            <div
-                              className="form-control"
-                              style={{ backgroundColor: "#e9ecef" }}
-                            >
-                              {formData.surname || ""}
-                            </div>
-                          )}
-                        </div>
-                        <div className=" mt-3">
-                          <label className="">Email:</label>
-                          {editing ? (
-                            <>
-                              <input
-                                type="text"
-                                {...register("email", {
-                                  required: {
-                                    value: true,
-                                    message: "Campo requerido",
-                                  },
-                                  maxLength: {
-                                    value: 50,
-                                    message: "Longitud máxima 50",
-                                  },
-                                })}
-                                className="form-control"
-                              />
-                              {errors && errors.email && (
-                                <Error error={errors.email.message} />
-                              )}
-                            </>
-                          ) : (
-                            <div
-                              className="form-control"
-                              style={{ backgroundColor: "#e9ecef" }}
-                            >
-                              {formData.email || ""}
-                            </div>
-                          )}
-                        </div>
-                        <div className=" mt-3">
-                          <label className="">Teléfono:</label>
-                          {editing ? (
-                            <>
-                              <input
-                                type="number"
-                                {...register("phone", {
-                                  required: {
-                                    value: true,
-                                    message: "Campo requerido",
-                                  },
-                                  maxLength: {
-                                    value: 12,
-                                    message: "Máximo 12 números",
-                                  },
-                                  minLength: {
-                                    value: 6,
-                                    message: "Mínimo 6 números",
-                                  },
-                                })}
-                                className="form-control"
-                              />
-                              {errors && errors.phone && (
-                                <Error error={errors.phone.message} />
-                              )}
-                            </>
-                          ) : (
-                            <div
-                              className="form-control"
-                              style={{ backgroundColor: "#e9ecef" }}
-                            >
-                              {formData.phone || ""}
-                            </div>
-                          )}
-                        </div>
+                            />
+                            {errors && errors.phone && (
+                              <Error error={errors.phone.message} />
+                            )}
+                          </>
+                        ) : (
+                          <div
+                            className="form-control"
+                            style={{ backgroundColor: "#e9ecef" }}
+                          >
+                            {formData.phone || "No especificado"}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                  <div className="col-12 mt-3 d-flex justify-content-center gap-4">
-                    {!editing && !loading && (
-                      <button
-                        type="button"
-                        className="btn btn-warning"
-                        onClick={handleEdit}
-                      >
-                        Editar
+                </div>
+                <div className="col-12 mt-3 d-flex justify-content-center gap-4">
+                  {!editing && !loading && (
+                    <button
+                      type="button"
+                      className="btn btn-warning"
+                      onClick={handleEdit}
+                    >
+                      Editar
+                    </button>
+                  )}
+                  {editing && !isLoading && (
+                    <>
+                      <button type="submit" className="btn btn-primary">
+                        Guardar
                       </button>
-                    )}
-                    {editing && (
-                      <>
-                        <button type="submit" className="btn btn-primary">
-                          Guardar
-                        </button>
-                        <button
-                          type="submit"
-                          onClick={handleCancelEditOrder}
-                          className="btn btn-danger text-white"
-                        >
-                          Cancelar
-                        </button>
-                      </>
-                    )}
-                    {loading && <Loader></Loader>}
-                  </div>
-                </form>
-              </div>
-     
+                      <button
+                        type="submit"
+                        onClick={handleCancelEditOrder}
+                        className="btn btn-danger text-white"
+                      >
+                        Cancelar
+                      </button>
+                    </>
+                  )}
+                  {isLoading && <Loader></Loader>}
+                  {loading && <Loader></Loader>}
+                </div>
+              </form>
+            </div>
+
             <div className="row mt-5">
               <h3 className="text-center">Anomalías</h3>
               <div className="col-xs-12 col-md-12  p-4 shadow-lg border border-1 rounded">

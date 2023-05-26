@@ -202,6 +202,7 @@ export const StudentAssigned = ({ order }) => {
             />
           )}
           {courseSearch && <h6 className="mt-3">Selecciona los alumnos</h6>}
+          {isLoading && <Loader />}
           {optionsNotAssigned.length > 0 && (
             <Select
               isMulti

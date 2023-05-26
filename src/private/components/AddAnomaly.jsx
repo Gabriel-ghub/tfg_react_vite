@@ -8,12 +8,23 @@ import { BASE_URL } from "../../api/api";
 import { Loader } from "../../components/Loader";
 
 export const AddAnomaly = ({ order, setAnomalies, setFormDataAnomalies }) => {
-  const { register, handleSubmit, watch, errors,reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset,
+    setError
+  } = useForm();
   const { sendRequest, isLoading, error, clearError } = useHttp();
   const { getToken } = useToken();
   const url_anomaly = `${BASE_URL}/anomaly/createOne`;
 
   const onAddAnomaly = async (data) => {
+    if(data.description.trim().length === 0){
+      setError("description", {type: "custom", message: "No puede contener solo espacios en blanco"})
+      return;
+    }
     const body = {
       anomaly: data.description,
       order_id: order,
@@ -48,6 +59,10 @@ export const AddAnomaly = ({ order, setAnomalies, setFormDataAnomalies }) => {
             required: {
               value: true,
               message: "Este campo es requerido",
+            },
+            minLength: {
+              value: 3,
+              message: "Debe tener al menos 5 caracteres",
             },
           })}
         />
