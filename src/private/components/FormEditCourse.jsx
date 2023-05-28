@@ -8,7 +8,6 @@ import { set, useForm } from "react-hook-form";
 import { ConfirmationModal } from "../../components/ConfirmationModal";
 import { Error } from "../../components/Error";
 
-
 export const FormEditCourse = ({ course }) => {
   const {
     register,
@@ -38,13 +37,13 @@ export const FormEditCourse = ({ course }) => {
       JSON.stringify(body),
       headers
     );
-   if (response) {
-     setSuccessMessage("Curso eliminado con éxito");
-     setTimeout(() => {
-       navigate(`/courses`);
-     }, 1500);
-   }
-       setShowModal(false);
+    if (response) {
+      setSuccessMessage("Curso eliminado con éxito");
+      setTimeout(() => {
+        navigate(`/courses`);
+      }, 1500);
+    }
+    setShowModal(false);
   };
 
   const onSubmit = async (data) => {
@@ -68,13 +67,13 @@ export const FormEditCourse = ({ course }) => {
       headers
     );
     if (response) {
-      setSuccessMessage(response.message)
+      setSuccessMessage(response.message);
       setTimeout(() => {
         navigate(`/courses`);
-      },1500)
+      }, 1500);
     }
   };
-  
+
   return (
     <>
       <form className="col-12 col-md-6" onSubmit={handleSubmit(onSubmit)}>
