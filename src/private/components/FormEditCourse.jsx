@@ -4,7 +4,7 @@ import useHttp from "../../hooks/useHttp";
 import { useToken } from "../../hooks/useToken";
 import { BASE_URL } from "../../api/api";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { ConfirmationModal } from "../../components/ConfirmationModal";
 import { Error } from "../../components/Error";
 
@@ -24,7 +24,6 @@ export const FormEditCourse = ({ course }) => {
   const navigate = useNavigate();
 
   const deleteCourse = async (id) => {
-    e.preventDefault();
     const token = getToken();
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -45,6 +44,7 @@ export const FormEditCourse = ({ course }) => {
        navigate(`/courses`);
      }, 1500);
    }
+       setShowModal(false);
   };
 
   const onSubmit = async (data) => {
@@ -150,7 +150,7 @@ export const FormEditCourse = ({ course }) => {
           )}
           <ConfirmationModal
             show={showModal}
-            message="¿Estás seguro que deseas borrar el curso?"
+            message="¿Estás seguro que deseas borrar el curso? Esto borrará a todos los alumnos asociados a el y sus trabajos."
             onConfirm={() => deleteCourse(course.id)}
             onCancel={() => setShowModal(false)}
           />

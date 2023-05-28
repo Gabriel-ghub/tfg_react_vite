@@ -113,6 +113,7 @@ export const StudentsPage = () => {
       <div className="row mt-5">
         <h2 className="text-center">Agregar nuevo alumno</h2>
         {isLoading && <Loader />}
+        {!isLoading && options.length < 1 && <p className="text-center">Primero debe crear un curso.</p>}
         {options.length > 0 && (
           <div className="mb-3 col-12 shadow-lg p-4">
             <div

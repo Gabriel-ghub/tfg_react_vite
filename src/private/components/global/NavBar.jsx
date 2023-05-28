@@ -10,7 +10,7 @@ export const NavBar = () => {
         <nav className="navbar navbar-dark navbar-expand-md bg-dark">
           <div className="container-fluid">
             <a className="navbar-brand" href="/">
-              Mecánica Jesuitas
+              Automoción CSC
             </a>
             <button
               className="navbar-toggler"

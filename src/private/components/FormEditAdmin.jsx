@@ -82,7 +82,7 @@ export const FormEditAdmin = () => {
         )}
       </div>
       <div className="form-group">
-        <label htmlFor="name">Contraseña</label>
+        <label htmlFor="name">Nueva contraseña</label>
         <input
           type="password"
           className="form-control"
