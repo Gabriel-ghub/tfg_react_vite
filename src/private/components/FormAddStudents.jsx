@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
 import useHttp from "../../hooks/useHttp";
 import { Loader } from "../../components/Loader";
 import uuid from "react-uuid";
-import { validationType } from "../../validations/validator";
 import { Error } from "../../components/Error";
 import Select from "react-select";
 
-export const FormAddStudents = ({ options}) => {
+export const FormAddStudents = ({ options }) => {
   const {
     register,
     handleSubmit,
@@ -19,6 +18,7 @@ export const FormAddStudents = ({ options}) => {
     getValues,
     reset,
     setError,
+    clearErrors,
   } = useForm();
   const [errorForm, setErrorForm] = useState(false);
   const [courseId, setCourseId] = useState(false);
@@ -61,14 +61,14 @@ export const FormAddStudents = ({ options}) => {
       setTimeout(() => {
         setSuccessRequest(false);
       }, 2000);
-      setSelectedOption(null)
+      setSelectedOption(null);
       reset();
     }
   };
 
   const handleSelect = (data) => {
     setSelectedOption(data);
-
+    clearErrors("course");
     setCourseId(data.value);
     setValue("course", data.value);
   };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { useForm } from "react-hook-form";
 import { useToken } from "../../hooks/useToken";
@@ -45,7 +45,7 @@ export const CarsPage = () => {
       selector: (row) => {
         return (
           <Link className="btn btn-warning" to={`/car/${row.id}/details`}>
-            Detalles
+            Editar
           </Link>
         );
       },

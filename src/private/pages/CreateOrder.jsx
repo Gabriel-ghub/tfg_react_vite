@@ -1,28 +1,89 @@
-import React, { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import uuid from "react-uuid";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CarContext } from "../context/CarContext/CarContext";
-import { OrderContext } from "../context/OrderContext/OrderContext";
 import { Main } from "../components/global/Main";
 import { Loader } from "../../components/Loader";
 import { validationType } from "../../validations/validator";
 import { Error } from "../../components/Error";
 import { useForm } from "react-hook-form";
+import { BASE_URL } from "../../api/api";
+import { useToken } from "../../hooks/useToken";
+import useHttp from "../../hooks/useHttp";
+const url_anomaly = `${BASE_URL}/anomaly/create`;
+const url_order = `${BASE_URL}/order/create`;
+
 export const CreateOrder = () => {
   const { plate_car } = useParams();
-  const { id, carInit, getCarInfo } = useContext(CarContext);
-  const { handleCreateOrder, isLoading, error, clearError } =
-    useContext(OrderContext);
-  const { register, handleSubmit, formState: { errors }, setValue, } = useForm();
+  const { sendRequest, isLoading, error, clearError } = useHttp();
+  const { getToken } = useToken();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const [newAnomaly, setNewAnomaly] = useState("");
   const [errorsEmpty, setErrorsEmpty] = useState(false);
   const navigate = useNavigate();
-  const [anomalies, setAnomalies] = useState([]);
+  const [anomalies, setAnomalies] = useState(false);
+  const [carFound, setCarFound] = useState(null);
 
   useEffect(() => {
+    const getCarInfo = async (matricula) => {
+      const token = getToken();
+      const url = `${BASE_URL}/car/search?plate=${matricula}`;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+      const response = await sendRequest(url, "GET", null, headers);
+      if (response) {
+        const car = {
+          id: response.id,
+          plate: response.plate,
+          brand: response.brand,
+          model: response.model,
+        };
+        setCarFound(car);
+      } else {
+        navigate("/car");
+        setCarFound(null);
+      }
+    };
     getCarInfo(plate_car);
   }, []);
+
+  async function handleCreateOrder(order, anomalies) {
+    if (!anomalies || anomalies.length < 1) {
+      setAnomalies([]);
+      return;
+    }
+    const token = getToken();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    const body = JSON.stringify(order);
+
+    const response = await sendRequest(url_order, "POST", body, headers);
+    if (response) {
+      let data = anomalies.map((anomaly) => {
+        return anomaly.description;
+      });
+      let data_anomalias = {
+        anomalias: data,
+        order_id: response.data.id,
+      };
+      const body = JSON.stringify(data_anomalias);
+
+      const response2 = await sendRequest(url_anomaly, "POST", body, headers);
+      if (response2) {
+        navigate(`/orders/${response2}/details`);
+      }
+    }
+  }
 
   const addAnomaly = (e) => {
     e.preventDefault();
@@ -71,7 +132,7 @@ export const CreateOrder = () => {
     let formattedDate = isoDate.substr(0, 10);
     const body = {
       ...data,
-      car_id: id,
+      car_id: carFound.id,
       date_in: formattedDate,
       kilometres: data.kilometres.replace(/\./g, ""),
       name: validationType["validateName"](data.name),
@@ -288,6 +349,9 @@ export const CreateOrder = () => {
                       id="anomalias"
                       onChange={(e) => setNewAnomaly(e.target.value)}
                     ></input>
+                    {anomalies && anomalies.length < 1 && (
+                      <Error error={"Debe agregar al menos una anomalía"} />
+                    )}
                   </div>
                 </div>
                 <button onClick={addAnomaly} className="btn">

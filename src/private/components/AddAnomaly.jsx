@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { validationType } from "../../validations/validator";
 import useHttp from "../../hooks/useHttp";
 import { useForm } from "react-hook-form";
 import { Error } from "../../components/Error";

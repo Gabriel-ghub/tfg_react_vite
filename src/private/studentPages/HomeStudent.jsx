@@ -9,7 +9,6 @@ import { Error } from "../../components/Error";
 import { NavBarStudents } from "../studentComponents/NavBarStudents";
 import { Loader } from "../../components/Loader";
 
-
 export const HomeStudent = () => {
   const { sendRequest, isLoading, error, clearError } = useHttp();
   const [pendingOrders, setPendingOrders] = useState([]);
@@ -70,7 +69,7 @@ export const HomeStudent = () => {
           <>
             <div className="row mt-3 shadow-lg p-4 rounded">
               <div className="col-12 mb-4">
-                <h3>Ordenes pendientes</h3>
+                <h3>Órdenes pendientes</h3>
               </div>
               <div
                 className="accordion accordion-flush"
@@ -93,16 +92,21 @@ export const HomeStudent = () => {
             </div>
             <div className="row mt-5 shadow-lg p-4 rounded">
               <div className="col-12 mb-4">
-                <h3>Ordenes finalizados</h3>
+                <h3>Ordenes Cerradas</h3>
               </div>
-              {completedOrders.length > 0 &&
-                completedOrders.map((order) => {
-                  return (
-                    <div key={order.id} className="row">
-                      <CardOrder {...order} />
-                    </div>
-                  );
-                })}
+              <div
+                className="accordion accordion-flush"
+                id="accordionFlushExample"
+              >
+                {completedOrders.length > 0 &&
+                  completedOrders.map((order) => {
+                    return (
+                      <div key={order.id} className="row">
+                        <CardOrder {...order} closed={"closed"} />
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           </>
         )}

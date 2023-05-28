@@ -1,34 +1,21 @@
-import { useContext, useState } from "react";
 import { Loader } from "../../components/Loader";
-import { CarContext } from "../context/CarContext/CarContext";
 import { BASE_URL } from "../../api/api";
 import useHttp from "../../hooks/useHttp";
-import { validationType } from "../../validations/validator";
 import { Error } from "../../components/Error";
 import { useForm } from "react-hook-form";
 
-const initialCar = {
-  plate: "",
-  brand: "",
-  model: "",
-};
 
 const url_create_car = `${BASE_URL}/car/create`;
 
-export const FormCreateCar = () => {
+export const FormCreateCar = ({ setCarFound }) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    setValue,
-    getValues,
   } = useForm();
-  const { createNewCar } = useContext(CarContext);
   const { isLoading, sendRequest, error, clearError } = useHttp();
 
   const onSubmit = async (data) => {
-
     const token = JSON.parse(localStorage.getItem("token"));
 
     const car = {
@@ -50,12 +37,10 @@ export const FormCreateCar = () => {
         brand: response.car.brand,
         id: response.car.id,
       };
-      createNewCar(newCar);
+      setCarFound(newCar);
     } else {
-      
     }
   };
-
 
   return (
     <>

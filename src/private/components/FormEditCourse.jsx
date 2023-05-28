@@ -4,7 +4,7 @@ import useHttp from "../../hooks/useHttp";
 import { useToken } from "../../hooks/useToken";
 import { BASE_URL } from "../../api/api";
 import { useNavigate } from "react-router-dom";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { ConfirmationModal } from "../../components/ConfirmationModal";
 import { Error } from "../../components/Error";
 

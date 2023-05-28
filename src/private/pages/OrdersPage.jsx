@@ -8,7 +8,7 @@ import DataTable from "react-data-table-component";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
 import { Error } from "../../components/Error";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 export const OrdersPage = () => {
   const [orders, setOrders] = useState([]);

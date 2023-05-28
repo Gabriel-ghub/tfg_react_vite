@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { CarContext } from "../context/CarContext/CarContext";
 
-export const CarCard = () => {
-  const { id, plate, brand, model } = useContext(CarContext);
+export const CarCard = ({car}) => {
+  const { id, plate, brand, model } = car;
   return (
     <>
       <div className="bg-dark text-white col-10 py-3">

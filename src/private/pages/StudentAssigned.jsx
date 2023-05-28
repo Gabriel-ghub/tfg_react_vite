@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useFetcher, useParams } from "react-router-dom";
-import { Main } from "../components/global/Main";
 import useHttp from "../../hooks/useHttp";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
@@ -8,11 +6,8 @@ import Select from "react-select";
 import { Loader } from "../../components/Loader";
 export const StudentAssigned = ({ order }) => {
   const order_id = order;
-  // // PARAMETRO
-  // const { work_id } = useParams();
   // // ESTADOS
   const [loading, setLoading] = useState(false);
-  // const [work, setWork] = useState(false)
   const [works, setWorks] = useState(false);
   const [assignedStudents, setAssignedStudents] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -125,10 +120,6 @@ export const StudentAssigned = ({ order }) => {
       setAssignedStudents([...assignedStudents, ...newStudents]);
       setNewStudents([]);
     }
-    // const newAssignedStudents = notAssignedStudents.filter((stu) => stu.id === student_id)[0]
-    // const tempNot_assignedStudents = notAssignedStudents.filter((stu) => stu.id !== student_id)
-    // setAssignedStudent([...assignedStudents, newAssignedStudents])
-    // setNotAssignedStudent(tempNot_assignedStudents)
   };
 
   const handleDettach = async (e, student_id) => {
@@ -163,25 +154,25 @@ export const StudentAssigned = ({ order }) => {
     <div className="row mt-5">
       <h3 className="text-center">Alumnos</h3>
       <div className="shadow-lg border p-4 border-1 rounded">
-        <div className="col-12 p-2">
+        <div className="p-2">
           {assignedStudents.length > 0
             ? assignedStudents.map((each) => {
                 return (
-                  <div
+                  <li
                     key={each.id}
                     className="d-flex flex-column flex-md-row gap-3 mb-2"
                   >
-                    <div
-                      className="form-control"
+                    <p
+                      className="flex-grow-1 mb-0 rounded p-2"
                       style={{ backgroundColor: "#e9ecef" }}
                     >
                       {each.name} {each.surname} ({each.course_name} {each.year}
                       )
-                    </div>
+                    </p>
                     {loading && loading.id == each.id ? (
                       <Loader />
                     ) : (
-                      <div className="col-12">
+                      <div className="d-flex gap-1">
                         <button
                           className="btn btn-danger text-white"
                           onClick={(e) => handleDettach(e, each.id)}
@@ -190,7 +181,7 @@ export const StudentAssigned = ({ order }) => {
                         </button>
                       </div>
                     )}
-                  </div>
+                  </li>
                 );
               })
             : "Esta orden no tiene alumnos asignados"}

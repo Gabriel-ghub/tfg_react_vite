@@ -21,8 +21,11 @@ export const LoginPage = () => {
     <>
       <div className="container-fluid vh-100">
         <div className="row vh-100">
-          <div className="col-sm-12 d-flex align-items-start justify-content-center bg-dark align-items-md-center text-white">
-            <form className="col-12 col-md-2" onSubmit={handleSubmit(onSubmit)}>
+          <div className="col-sm-12 d-flex align-items-center justify-content-center bg-dark align-items-md-center text-white">
+            <form
+              className="col-12 col-sm-6 col-md-3"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <h1 className="mb-5 text-center">Automoción CSC</h1>
               {error && (
                 <div className="d-flex justify-content-center alert alert-danger mt-1">
@@ -60,7 +63,7 @@ export const LoginPage = () => {
                     minLength: {
                       value: 6,
                       message: "La contraseña debe tener al menos 6 caracteres",
-                    }
+                    },
                   })}
                 />
                 {errors && errors.password && (

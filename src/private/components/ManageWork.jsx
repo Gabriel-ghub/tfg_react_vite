@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { SelectCourse } from "./SelectCourse";
 import useHttp from "../../hooks/useHttp";
 import { useToken } from "../../hooks/useToken";
 import { BASE_URL } from "../../api/api";
-import { Loader } from "../../components/Loader";
-import DataTable from "react-data-table-component";
 import Select from 'react-select'
 export const ManageWork = ({ work }) => {
   const [courses, setCourses] = useState([]);

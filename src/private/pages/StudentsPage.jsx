@@ -81,41 +81,47 @@ export const StudentsPage = () => {
     setCourseId(data.value);
     handleSetCourse(data.value);
   };
-
-  const resetSelect = () => {
-    setSelectedOption(null);
-  };
   return (
     <Main page={"students_page"}>
       <div className="row mt-5">
         <h2 className="text-center">Listado de alumnos</h2>
         <div className=" shadow-lg p-4">
-          <div className="col-12 col-md-6 p-2">
-            <Select
-              className=""
-              options={options}
-              onChange={handleSelect}
-              value={selectedOption}
-            />
-            {isLoading && <Loader />}
-            {courseId && !isLoading && students.length < 1 && (
-              <div>Este curso no tiene estudiantes</div>
-            )}
-          </div>
-          <div className="col-12">
-            {courseId && !isLoading && students.length > 0 && (
-              <DataTable columns={columns} data={students} pagination />
-            )}
-          </div>
+          {!isLoading && options.length < 1 && (
+            <p className="text-center">Primero debe crear un curso.</p>
+          )}
+          {options && options.length > 0 && (
+            <>
+              <div className="col-12 col-md-6 p-2">
+                <Select
+                  className=""
+                  options={options}
+                  onChange={handleSelect}
+                  value={selectedOption}
+                />
+                {isLoading && <Loader />}
+                {courseId && !isLoading && students.length < 1 && (
+                  <div>Este curso no tiene estudiantes</div>
+                )}
+              </div>
+              <div className="col-12">
+                {courseId && !isLoading && students.length > 0 && (
+                  <DataTable columns={columns} data={students} pagination />
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       <div className="row mt-5">
         <h2 className="text-center">Agregar nuevo alumno</h2>
         {isLoading && <Loader />}
-        {!isLoading && options.length < 1 && <p className="text-center">Primero debe crear un curso.</p>}
-        {options.length > 0 && (
-          <div className="mb-3 col-12 shadow-lg p-4">
+
+        <div className="mb-3 col-12 shadow-lg p-4">
+          {!isLoading && options.length < 1 && (
+            <p className="text-center">Primero debe crear un curso.</p>
+          )}
+          {options.length > 0 && (
             <div
               className="accordion accordion-flush"
               id="accordionFlushExample"
@@ -175,8 +181,8 @@ export const StudentsPage = () => {
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </Main>
   );

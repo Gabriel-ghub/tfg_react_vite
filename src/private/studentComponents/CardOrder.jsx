@@ -11,7 +11,10 @@ export const CardOrder = ({
   plate,
   anomalies,
   id,
+  state,
+  closed
 }) => {
+  console.log(state)
   const { getToken } = useToken();
   const { sendRequest, isLoading, error, clearError } = useHttp();
   const [materials, setMaterials] = useState([]);
@@ -144,27 +147,29 @@ export const CardOrder = ({
             <div className="col-12">
               <h5 className="card-title">Trabajos</h5>
               <div className="d-flex justify-content-between mb-3">
-                <input
-                  {...register("work_description", {
-                    required: {
-                      value: true,
-                      message: "Debe ingresar una descripción",
-                    },
-                    maxLength: {
-                      value: 200,
-                      message:
-                        "La descripción no puede superar los 200 caracteres",
-                    },
-                  })}
-                  className="form-control"
-                  placeholder="Describa aquí los trabajos realizados"
-                  id=""
-                  height="100%"
-                  cols="30"
-                  rows="10"
-                />
+                {!closed && (
+                  <input
+                    {...register("work_description", {
+                      required: {
+                        value: true,
+                        message: "Debe ingresar una descripción",
+                      },
+                      maxLength: {
+                        value: 200,
+                        message:
+                          "La descripción no puede superar los 200 caracteres",
+                      },
+                    })}
+                    className="form-control"
+                    placeholder="Describa aquí los trabajos realizados"
+                    id=""
+                    height="100%"
+                    cols="30"
+                    rows="10"
+                  />
+                )}
 
-                {!isLoading && (
+                {!isLoading && !closed && (
                   <button type="submit" className="btn">
                     <svg
                       className="cursor-pointer"
@@ -198,12 +203,14 @@ export const CardOrder = ({
                       >
                         {each.description}
                       </p>
-                      <button
-                        className="btn btn-danger text-white"
-                        onClick={(e) => handleDeleteWork(e, each.id)}
-                      >
-                        Quitar
-                      </button>
+                      {!closed && (
+                        <button
+                          className="btn btn-danger text-white"
+                          onClick={(e) => handleDeleteWork(e, each.id)}
+                        >
+                          Quitar
+                        </button>
+                      )}
                     </div>
                   );
                 })
@@ -212,39 +219,41 @@ export const CardOrder = ({
               )}
             </div>
           </form>
-            <div className="col-12">
-              <h5 className="card-title">Materiales</h5>
-              <Materials order_id={id} setMaterials={setMaterials}/>
-              {materials.length > 0 ? (
-                materials.map((each, index) => {
-                  return (
-                    <div className="col-12 d-flex gap-1 mb-2 mt-2" key={index}>
-                      <p
-                        className="m-1 py-1 form-control w-75"
-                        style={{ backgroundColor: "#e9ecef" }}
-                      >
-                        {each.description}
-                      </p>
-                      <p
-                        className="m-1 py-1 form-control w-25"
-                        style={{ backgroundColor: "#e9ecef" }}
-                      >
-                        {each.quantity}
-                      </p>
+          <div className="col-12">
+            <h5 className="card-title">Materiales</h5>
+            {!closed && <Materials order_id={id} setMaterials={setMaterials} />}
+            {materials.length > 0 ? (
+              materials.map((each, index) => {
+                return (
+                  <div className="col-12 d-flex gap-1 mb-2 mt-2" key={index}>
+                    <p
+                      className="m-1 py-1 form-control w-75"
+                      style={{ backgroundColor: "#e9ecef" }}
+                    >
+                      {each.description}
+                    </p>
+                    <p
+                      className="m-1 py-1 form-control w-25"
+                      style={{ backgroundColor: "#e9ecef" }}
+                    >
+                      {each.quantity}
+                    </p>
 
+                    {!closed && (
                       <button
                         className="btn btn-danger text-white"
                         onClick={(e) => handleDeleteMaterial(e, each.id)}
                       >
                         Quitar
                       </button>
-                    </div>
-                  );
-                })
-              ) : (
-                <p className="mt-2">Sin materiales</p>
-              )}
-            </div>
+                    )}
+                  </div>
+                );
+              })
+            ) : (
+              <p className="mt-2">Sin materiales</p>
+            )}
+          </div>
         </div>
       </div>
     </>

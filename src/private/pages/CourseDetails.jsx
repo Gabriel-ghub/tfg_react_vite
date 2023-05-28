@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { useToken } from "../../hooks/useToken";

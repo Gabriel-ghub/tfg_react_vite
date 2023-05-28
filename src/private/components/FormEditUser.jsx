@@ -6,11 +6,11 @@ import { useToken } from "../../hooks/useToken";
 import useHttp from "../../hooks/useHttp";
 import { Loader } from "../../components/Loader";
 import { Error } from "../../components/Error";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ConfirmationModal } from "../../components/ConfirmationModal";
 
 export const FormEditUser = ({ user, courses }) => {
-  const { name, surname, email, id } = user;
+  const { id } = user;
   const { getToken } = useToken();
   const navigate = useNavigate();
   const { sendRequest, isLoading, error, clearError } = useHttp();
@@ -97,7 +97,7 @@ export const FormEditUser = ({ user, courses }) => {
       </Link>
       <div className="row mt-5 shadow-lg rounded py-5">
         <div className="col-12 d-flex justify-content-center">
-          <form className="col-6" onSubmit={handleSubmit(onSubmit)}>
+          <form className="col-12 col-md-6" onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="" className="form-label">
               Nombre
             </label>

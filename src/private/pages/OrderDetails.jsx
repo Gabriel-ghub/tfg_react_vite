@@ -544,7 +544,10 @@ export const OrderDetails = () => {
       ) : (
         //A PARTIR DE ACA EMPIEZA LA SECCIÓN DE ORDEN FINALIZADA
         <>
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-between">
+            <Link className="btn btn-primary" to={"/orders"}>
+              Volver
+            </Link>
             <button className="btn btn-primary" onClick={handlePrint}>
               Generar pdf
             </button>
@@ -645,7 +648,7 @@ export const OrderDetails = () => {
             </div>
             <div className="mt-5 p-0">
               <h3 className="text-center">Anomalías</h3>
-              <div className="col-xs-12 col-md-12 p-3">
+              <div className="col-xs-12 col-md-12">
                 <div>
                   <h5>Anomalías declaradas</h5>
                   <ul className="p-0">

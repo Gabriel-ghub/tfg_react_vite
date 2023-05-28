@@ -11,7 +11,6 @@ export const Anomaly = ({
   id,
   description,
   onSubmitAnomaly,
-  index,
   setFormDataAnomalies,
   setAnomalies
 }) => {
@@ -19,7 +18,6 @@ export const Anomaly = ({
   const [editingAnomalies, setEditingAnomalies] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const {getToken} = useToken();
-  const [isDeleting, setDeleting] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { isLoading, sendRequest, error } = useHttp();
   const {

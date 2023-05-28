@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import useHttp from "../../hooks/useHttp";
 import { useToken } from "../../hooks/useToken";
-import { SelectCourse } from "./SelectCourse";
 import { Error } from "../../components/Error";
 import { BASE_URL } from "../../api/api";
 import Select from "react-select";

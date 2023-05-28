@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useHttp from "../../hooks/useHttp";
 import { Main } from "../components/global/Main";
-import { OrderTable } from "../components/OrderTable";
-import { OrderContext } from "../context/OrderContext/OrderContext";
 import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 import { FormAddCourse } from "../components/FormAddCourse";
