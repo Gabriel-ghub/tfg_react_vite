@@ -6,7 +6,7 @@ import { useToken } from "../../hooks/useToken";
 import useHttp from "../../hooks/useHttp";
 import { Loader } from "../../components/Loader";
 import { Error } from "../../components/Error";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ConfirmationModal } from "../../components/ConfirmationModal";
 
 export const FormEditUser = ({ user, courses }) => {
@@ -45,7 +45,7 @@ export const FormEditUser = ({ user, courses }) => {
     const body = {
       name: data.name.trim(),
       surname: data.surname.trim(),
-      email: data.email.trim(),
+      // email: data.email.trim(),
       course_id: data.course_id,
       id: id,
     };
@@ -61,6 +61,9 @@ export const FormEditUser = ({ user, courses }) => {
     );
     if (response) {
       setSuccessMessage(response.message);
+      setTimeout(() => {
+      setSuccessMessage(false);
+      }, 2000);
     }
   };
 
@@ -82,7 +85,7 @@ export const FormEditUser = ({ user, courses }) => {
       setShowModal(false);
       setTimeout(() => {
         navigate("/students");
-      },1500)
+      }, 1500);
     } else {
       setShowModal(false);
     }
@@ -100,6 +103,7 @@ export const FormEditUser = ({ user, courses }) => {
             </label>
             <input
               type="text"
+              maxLength="50"
               className="form-control"
               {...register("name", {
                 required: {
@@ -117,11 +121,15 @@ export const FormEditUser = ({ user, courses }) => {
               })}
             />
             {error && error.name && <Error error={error.name[0]} />}
+            {errors && errors.name && errors.name.message && (
+              <Error error={errors.name.message} />
+            )}
             <label htmlFor="" className="form-label">
               Apellido
             </label>
             <input
               type="text"
+              maxLength="50"
               className="form-control"
               {...register("surname", {
                 required: {
@@ -139,11 +147,15 @@ export const FormEditUser = ({ user, courses }) => {
               })}
             />
             {error && error.surname && <Error error={error.surname[0]} />}
+            {errors && errors.surname && errors.surname.message && (
+              <Error error={errors.surname.message} />
+            )}
             <label htmlFor="" className="form-label">
               Email
             </label>
-            <input
+            {/* <input
               type="email"
+              maxLength="50"
               className="form-control"
               {...register("email", {
                 required: {
@@ -163,8 +175,14 @@ export const FormEditUser = ({ user, courses }) => {
                   message: "El email debe ser válido",
                 },
               })}
-            />
-            {error && error.email && <Error error={error.email[0]} />}
+            /> */}
+            <div
+              className="form-control"
+              style={{ backgroundColor: "#e9ecef" }}
+            >
+              {getValues("email")}
+            </div>
+            {/* {error && error.email && <Error error={error.email[0]} />} */}
             <label htmlFor="" className="form-label">
               Curso
             </label>

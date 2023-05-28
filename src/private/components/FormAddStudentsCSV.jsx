@@ -4,17 +4,19 @@ import { useToken } from "../../hooks/useToken";
 import { SelectCourse } from "./SelectCourse";
 import { Error } from "../../components/Error";
 import { BASE_URL } from "../../api/api";
-import Select  from "react-select";
+import Select from "react-select";
+import { Loader } from "../../components/Loader";
 const url_csv = `${BASE_URL}/user/createCSV`;
 export const FormAddStudentsCSV = ({ options }) => {
   const { sendRequest, isLoading, error, clearError } = useHttp();
   const { getToken } = useToken();
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState();
   const [courseId, setCourseId] = useState(null);
   const [success, setSuccess] = useState(false);
-  const [errorCSV, setErrorCSV] = useState(false)
+  const [errorCSV, setErrorCSV] = useState(false);
 
   const handleSubmit = async (event) => {
+    setSuccess(false);
     event.preventDefault();
     if (courseId == null || file == null) {
       setErrorCSV("Debe seleccionar un curso y un archivo CSV");
@@ -32,11 +34,16 @@ export const FormAddStudentsCSV = ({ options }) => {
     const response = await sendRequest(url_csv, "POST", body, headers);
     if (response) {
       setSuccess("Alumnos añadidos con éxito");
+      setTimeout(() => {
+        setSuccess(false);
+      }, 2000);
     }
+    setFile(null);
+    setCourseId(null);
   };
-   const handleSelect = (selectedOption) => {
+  const handleSelect = (selectedOption) => {
     setCourseId(selectedOption.value);
-   }
+  };
 
   return (
     <>
@@ -49,24 +56,38 @@ export const FormAddStudentsCSV = ({ options }) => {
               className="form-control"
               onChange={(event) => setFile(event.target.files[0])}
             />
+            {error && error.csv && (
+              <Error error={error.csv} clearError={clearError} />
+            )}
           </div>
-          <Select options={options}/>
+          <div className="col-12 col-md-6">
+            <label className="form-label">Elige un curso</label>
+            <Select options={options} onChange={handleSelect} />
+            {error && error.course_id && (
+              <Error error={error.course_id} clearError={clearError} />
+            )}
+          </div>
         </div>
+
         {success && (
           <div class="alert alert-info mt-3" role="alert">
             {success}
           </div>
         )}
-        {errorCSV && <Error error={errorCSV}/>}
+        {errorCSV && <Error error={errorCSV} />}
         {error &&
           Array.isArray(error) &&
           error.map((each, index) => (
             <Error error={each.message} clearError={clearError} />
           ))}
         <div className="col-12 text-center mt-5">
-          <button type="submit" className="btn btn-primary ">
-            Agregar
-          </button>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <button type="submit" className="btn btn-primary ">
+              Agregar
+            </button>
+          )}
         </div>
       </form>
     </>

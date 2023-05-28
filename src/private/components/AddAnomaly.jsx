@@ -22,11 +22,11 @@ export const AddAnomaly = ({ order, setAnomalies, setFormDataAnomalies }) => {
 
   const onAddAnomaly = async (data) => {
     if(data.description.trim().length === 0){
-      setError("description", {type: "custom", message: "No puede contener solo espacios en blanco"})
+      setError("description", {type: "custom", message: "No puede estar vacío"})
       return;
     }
     const body = {
-      anomaly: data.description,
+      description: data.description,
       order_id: order,
     };
     const token = getToken();
@@ -66,25 +66,30 @@ export const AddAnomaly = ({ order, setAnomalies, setFormDataAnomalies }) => {
             },
           })}
         />
-        {errors && errors.description && (
+        {error && error.description && (
+          <Error error={error.description} clearError={clearError} />
+        )}
+        {errors && errors.description && errors.description.message && (
           <Error error={errors.description.message} />
         )}
       </div>
       {isLoading ? (
         <Loader />
       ) : (
-        <button className="btn" type="submit">
-          <svg
-            className="cursor-pointer"
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="#027373"
-            viewBox="0 0 16 16"
-          >
-            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
-          </svg>
-        </button>
+        <div className="col-12 d-flex justify-content-center">
+          <button className="btn" type="submit">
+            <svg
+              className="cursor-pointer"
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="#027373"
+              viewBox="0 0 16 16"
+            >
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
+            </svg>
+          </button>
+        </div>
       )}
     </form>
   );

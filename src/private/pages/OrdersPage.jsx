@@ -8,11 +8,11 @@ import DataTable from "react-data-table-component";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
 import { Error } from "../../components/Error";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 
 export const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
-  const [mensaje, setMensaje] = useState(false);
+  const [filterMessage, setFilterMessage] = useState(false);
   const { isLoading, sendRequest, clearError, error, setIsLoading } = useHttp();
 
   const {
@@ -20,46 +20,38 @@ export const OrdersPage = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm({
+    reValidateMode: "onSubmit",
+  });
   const { getToken } = useToken();
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
     const token = getToken();
-    setMensaje(false);
-
+   
     const fetchData = async () => {
-      try {
+
         const url = `${BASE_URL}/order/list`;
-        const responseData = await sendRequest(url, "GET", null, {
+        const response = await sendRequest(url, "GET", null, {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         });
-        setOrders(responseData);
-      } catch (err) {
-        setMensaje(true);
-      }
+        if(response){
+          setOrders(response);
+        }
     };
     fetchData();
   }, []);
 
   const handleCleanForm = () => {
     setFiltered([]);
-    setMensaje(false);
+    setFilterMessage(false);
     setValue("value", "");
   };
   const validations = {
     required: {
       value: true,
       message: "Campo requerido",
-    },
-    maxLength: {
-      value: 10,
-      message: "Máximo 10 caracteres",
-    },
-    minLength: {
-      value: 5,
-      message: "Mínimo 5 caracteres",
     },
   };
 
@@ -76,7 +68,7 @@ export const OrdersPage = () => {
     },
     {
       name: "Estado",
-      selector: (row) => (row.state === 0 ? "En proceso" : "Finalizada"),
+      selector: (row) => (row.state === 0 ? "En proceso" : "Cerrada"),
       sortable: true,
     },
     {
@@ -104,7 +96,7 @@ export const OrdersPage = () => {
     },
     {
       name: "Estado",
-      selector: (row) => (row.state == 0 ? "En proceso" : "Finalizada"),
+      selector: (row) => (row.state == 0 ? "En proceso" : "Cerrada"),
       sortable: true,
     },
     {
@@ -124,32 +116,21 @@ export const OrdersPage = () => {
     },
   ];
   const onSubmit = async (data) => {
-    console.log(data);
-    setFiltered([]);
-    let orders_result = false;
-    if (data.filter == "plate") {
-      const filtered = orders.filter((order) => order.plate == data.value);
-      if (filtered.length > 0) {
-        orders_result = filtered;
-      }
-    } else if (data.filter == "name") {
-      const filtered = orders.filter((order) =>
-        order.name.toLowerCase().includes(data.value.toLowerCase())
-      );
-      if (filtered.length > 0) {
-        orders_result = filtered;
-      }
-    } else if (data.filter == "surname") {
-      const filtered = orders.filter((order) =>
-        order.surname.toLowerCase().includes(data.value.toLowerCase())
-      );
-      if (filtered.length > 0) {
-        orders_result = filtered;
-      }
+    setFilterMessage(false);
+    let resultFilter = [];
+    if (data.filter) {
+      resultFilter = orders.filter((order) => {
+        if (
+          order[data.filter].toLowerCase().includes(data.value.toLowerCase())
+        ) {
+          return order;
+        }
+      });
     }
-    if (!orders_result) {
-      setMensaje("No se encontraron resultados");
+    if (resultFilter.length === 0) {
+      setFilterMessage("No se encontraron resultados");
     }
+    setFiltered(resultFilter);
   };
 
   return (
@@ -174,13 +155,11 @@ export const OrdersPage = () => {
                   <option value="surname">Apellido</option>
                 </select>
               </div>
-              {mensaje && <Error error={mensaje} />}
+              {filterMessage && <Error error={filterMessage} />}
               {errors && errors.value && (
                 <p className="my-1">{errors.value.message}</p>
               )}
-              {isLoading ? (
-                <Loader />
-              ) : (
+              {!isLoading && (
                 <div className="mt-3 d-flex gap-2">
                   <button type="submit" className="btn btn-primary">
                     Buscar
@@ -193,13 +172,15 @@ export const OrdersPage = () => {
             </form>
             {isLoading && <Loader></Loader>}
 
-            {!isLoading && orders.length > 0 && (
+            {!isLoading && orders.length > 0 
+            ? (
               <DataTable
                 columns={columns}
                 data={filtered.length > 0 ? filtered : orders}
                 pagination
               />
-            )}
+            ):
+            <p className="text-center">No hay órdenes</p>}
           </div>
         </div>
       </Main>

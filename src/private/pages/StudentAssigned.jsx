@@ -163,11 +163,14 @@ export const StudentAssigned = ({ order }) => {
     <div className="row mt-5">
       <h3 className="text-center">Alumnos</h3>
       <div className="shadow-lg border p-4 border-1 rounded">
-        <div className="col-xs-12 col-md-12 p-2">
+        <div className="col-12 p-2">
           {assignedStudents.length > 0
             ? assignedStudents.map((each) => {
                 return (
-                  <div className="d-flex gap-3 mb-2">
+                  <div
+                    key={each.id}
+                    className="d-flex flex-column flex-md-row gap-3 mb-2"
+                  >
                     <div
                       className="form-control"
                       style={{ backgroundColor: "#e9ecef" }}
@@ -178,12 +181,14 @@ export const StudentAssigned = ({ order }) => {
                     {loading && loading.id == each.id ? (
                       <Loader />
                     ) : (
-                      <button
-                        className="btn btn-danger text-white"
-                        onClick={(e) => handleDettach(e, each.id)}
-                      >
-                        Quitar
-                      </button>
+                      <div className="col-12">
+                        <button
+                          className="btn btn-danger text-white"
+                          onClick={(e) => handleDettach(e, each.id)}
+                        >
+                          Quitar
+                        </button>
+                      </div>
                     )}
                   </div>
                 );

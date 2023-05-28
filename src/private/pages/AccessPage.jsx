@@ -7,8 +7,9 @@ import useHttp from "../../hooks/useHttp";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
 import { Loader } from "../../components/Loader";
+import { FormEditAdmin } from "../components/FormEditAdmin";
 
-export const TeachersPage = () => {
+export const AccessPage = () => {
   const [teachers, setTeachers] = useState([]);
   const { isLoading, sendRequest, error } = useHttp();
   const { getToken } = useToken();
@@ -55,8 +56,9 @@ export const TeachersPage = () => {
   ];
   return (
     <Main page={"teachers_page"}>
-      <div className="row mt-5 text-center rounded">
-        <h2>Listado de profesores</h2>
+      <Link className="btn btn-primary" to={"/orders"}>Volver</Link>
+      {/* <div className="row mt-5 text-center rounded">
+         <h2>Listado de profesores</h2>
         <div className="col-12 shadow-lg p-4">
           {isLoading ? (
             <Loader />
@@ -64,13 +66,19 @@ export const TeachersPage = () => {
             <DataTable columns={columns} data={teachers} pagination />
           )}
         </div>
+      </div>  */}
+      <div className="row mt-5 text-center rounded">
+        <h3>Cambiar los datos de acceso</h3>
+        <div className="col-12 d-flex justify-content-center shadow-lg p-4">
+          <FormEditAdmin />
+        </div>
       </div>
-      <div className="row mt-5">
+      {/* <div className="row mt-5">
         <div className="col-12 p-4 shadow-lg text-center rounded">
           <h2>Añadir profesores</h2>
           <FormAddTeacher setTeachers={setTeachers} />
         </div>
-      </div>
+      </div> */}
     </Main>
   );
 };

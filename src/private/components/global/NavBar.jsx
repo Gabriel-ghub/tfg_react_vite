@@ -90,13 +90,18 @@ export const NavBar = () => {
                         </Link>
                       </li>
                       <li className="nav-item">
-                        <Link className="nav-link text-dark" to={"/teachers"}>
-                          Profesores
+                        <Link className="nav-link text-dark" to={"/courses"}>
+                          Cursos
                         </Link>
                       </li>
                       <li className="nav-item">
-                        <Link className="nav-link text-dark" to={"/courses"}>
-                          Cursos
+                        <Link className="nav-link text-dark" to={"/cars"}>
+                          Coches
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link className="nav-link text-dark" to={"/access"}>
+                          Acceso
                         </Link>
                       </li>
                     </ul>

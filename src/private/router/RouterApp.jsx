@@ -9,18 +9,20 @@ import { OrderDetails } from "../pages/OrderDetails";
 import { OrdersPage } from "../pages/OrdersPage";
 import { SearchCarPage } from "../pages/SearchCarPage";
 import { StudentsPage } from "../pages/StudentsPage";
-import { TeachersPage } from "../pages/TeachersPage";
+import { AccessPage } from "../pages/AccessPage";
 import { Works } from "../pages/Works";
 import { StudentAssigned } from "../pages/StudentAssigned";
 import { StudentDetails } from "../pages/StudentDetails";
 import { TeacherDetails } from "../pages/TeachersDetails";
 import { NavBar } from "../components/global/NavBar";
-
+import { CarsPage } from "../pages/CarsPage";
+import { CarDetails } from "../pages/CarDetails";
 export const RouterApp = () => {
   return (
     <>
       <NavBar />
       <Routes>
+
         <Route path="home" element={<OrdersPage />}></Route>
         <Route path="car" element={<SearchCarPage />}></Route>
         <Route
@@ -32,20 +34,14 @@ export const RouterApp = () => {
           path="orders/:order_id/details"
           element={<OrderDetails />}
         ></Route>
-        {/* <Route
-            path="works/:work_id/details" element={<WorksDetails/>}
-          ></Route> */}
-        {/* <Route path="orders/:order_id/works" element={<WorksPage />}></Route> */}
+        <Route path="car/:car_id/details" element={<CarDetails />}></Route>
         <Route path="students" element={<StudentsPage />}></Route>
         <Route
           path="student/:student_id/detail"
           element={<StudentDetails />}
         ></Route>
-        {/* <Route
-            path="teacher/:teacher_id/detail"
-            element={<TeacherDetails />}
-          ></Route> */}
-        <Route path="teachers" element={<TeachersPage />}></Route>
+        <Route path="cars" element={<CarsPage />}></Route>
+        <Route path="access" element={<AccessPage />}></Route>
         <Route path="facturation" element={<FacturationPage />}></Route>
         <Route path="courses" element={<CoursesPage />}></Route>
         <Route

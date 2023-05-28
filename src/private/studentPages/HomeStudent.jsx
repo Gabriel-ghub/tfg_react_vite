@@ -7,6 +7,8 @@ import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
 import { Error } from "../../components/Error";
 import { NavBarStudents } from "../studentComponents/NavBarStudents";
+import { Loader } from "../../components/Loader";
+
 
 export const HomeStudent = () => {
   const { sendRequest, isLoading, error, clearError } = useHttp();

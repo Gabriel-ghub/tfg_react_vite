@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Main } from "../components/global/Main";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
@@ -8,6 +8,7 @@ import { FormEditUser } from "../components/FormEditUser";
 import { Loader } from "../../components/Loader";
 
 export const StudentDetails = () => {
+  const navigate = useNavigate();
   const { student_id } = useParams();
   const { isLoading, sendRequest, error, clearError } = useHttp();
   const { getToken } = useToken();
@@ -26,7 +27,10 @@ export const StudentDetails = () => {
       const response = await sendRequest(url, "GET", null, headers);
       if (response) {
         setUser(response);
+      }else{
+        navigate("/students")
       }
+
       const response_courses = await sendRequest(
         url_courses,
         "GET",

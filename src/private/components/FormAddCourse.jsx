@@ -46,7 +46,10 @@ export const FormAddCourse = ({ courses, setCourses }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="d-flex gap-2 col-12 col-md-6">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="d-flex gap-2 col-12 col-md-6"
+    >
       <label className="form-label">Datos del curso</label>
       <label htmlFor="name" className="form-label">
         Nombre
@@ -54,6 +57,7 @@ export const FormAddCourse = ({ courses, setCourses }) => {
       <input
         type="text"
         className="form-control"
+        maxLength="50"
         {...register("name", {
           required: {
             value: true,
@@ -79,6 +83,7 @@ export const FormAddCourse = ({ courses, setCourses }) => {
       <input
         type="number"
         className="form-control"
+        maxLength="4"
         {...register("year", {
           required: {
             value: true,
@@ -89,8 +94,8 @@ export const FormAddCourse = ({ courses, setCourses }) => {
             message: "El año debe tener al menos 2 caracteres",
           },
           maxLength: {
-            value: 5,
-            message: "El año debe tener menos de 5 caracteres",
+            value: 4,
+            message: "El año debe tener menos de 4 caracteres",
           },
         })}
       />

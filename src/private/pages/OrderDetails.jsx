@@ -12,6 +12,7 @@ import { StudentAssigned } from "./StudentAssigned";
 import { WorksAndMaterials } from "../components/WorksAndMaterials";
 import { Error } from "../../components/Error";
 import { useToken } from "../../hooks/useToken";
+import { ConfirmationModal } from "../../components/ConfirmationModal";
 
 export const OrderDetails = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ export const OrderDetails = () => {
   const [editing, setEditing] = useState(false);
   const [dataToPDF, setDataToPDF] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const {
     register,
@@ -68,6 +70,7 @@ export const OrderDetails = () => {
         setLoading(false);
         return data.order;
       } catch (error) {
+        navigate("/orders");
         setErrores(error.message);
         setLoading(false);
       }
@@ -76,6 +79,18 @@ export const OrderDetails = () => {
 
   const handleEdit = () => {
     setEditing(true);
+  };
+
+  const deleteOrder = async () => {
+    const url_delete = `${BASE_URL}/order/${order_id}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const response = await sendRequest(url_delete, "DELETE", null, headers);
+    if (response) {
+      navigate("/orders");
+    }
   };
 
   const onSubmitAnomaly = async (id, newdescription) => {
@@ -138,8 +153,16 @@ export const OrderDetails = () => {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
-    const body = JSON.stringify(data);
-    const response = await sendRequest(url_update, "POST", body, headers);
+    const body = {
+      ...data,
+      kilometres: data.kilometres.replace(/\./g, ""),
+    };
+    const response = await sendRequest(
+      url_update,
+      "POST",
+      JSON.stringify(body),
+      headers
+    );
 
     if (response) {
       setOrder(response.order);
@@ -257,7 +280,7 @@ export const OrderDetails = () => {
                         className="form-control"
                         style={{ backgroundColor: "#e9ecef" }}
                       >
-                        {formData.state == 0 ? "En proceso" : "Finalizada"}
+                        {formData.state == 0 ? "En proceso" : "Cerrada"}
                       </div>
                     </div>
                     <div className=" mt-3">
@@ -287,7 +310,14 @@ export const OrderDetails = () => {
                                 },
                               })}
                               className="form-control"
+                              maxLength="50"
                             />
+                            {error && error.name && (
+                              <Error
+                                error={error.name}
+                                clearError={clearError}
+                              />
+                            )}
                             {errors && errors.name && (
                               <Error error={errors.name.message} />
                             )}
@@ -317,8 +347,15 @@ export const OrderDetails = () => {
                                   message: "Longitud máxima 50",
                                 },
                               })}
+                              maxLength="50"
                               className="form-control"
                             />
+                            {error && error.surname && (
+                              <Error
+                                error={error.surname}
+                                clearError={clearError}
+                              />
+                            )}
                             {errors && errors.surname && (
                               <Error error={errors.surname.message} />
                             )}
@@ -344,9 +381,20 @@ export const OrderDetails = () => {
                                     /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
                                   message: "Email inválido",
                                 },
+                                maxLength: {
+                                  value: 50,
+                                  message: "Longitud máxima 50",
+                                },
                               })}
                               className="form-control"
+                              maxLength="50"
                             />
+                            {error && error.email && (
+                              <Error
+                                error={error.email}
+                                clearError={clearError}
+                              />
+                            )}
                             {errors && errors.email && (
                               <Error error={errors.email.message} />
                             )}
@@ -371,9 +419,20 @@ export const OrderDetails = () => {
                                   value: /^[0-9]*$/,
                                   message: "Solo se permiten números",
                                 },
+                                maxLength: {
+                                  value: 11,
+                                  message: "Longitud máxima 11",
+                                },
                               })}
+                              maxLength="11"
                               className="form-control"
                             />
+                            {error && error.phone && (
+                              <Error
+                                error={error.phone}
+                                clearError={clearError}
+                              />
+                            )}
                             {errors && errors.phone && (
                               <Error error={errors.phone.message} />
                             )}
@@ -454,12 +513,33 @@ export const OrderDetails = () => {
 
             <StudentAssigned order={order_id} />
             <WorksAndMaterials order={order_id} />
-            <div className="col-12 d-flex justify-content-center my-5 py-4">
-              <button className="btn btn-primary" onClick={handleCloseOrder}>
-                Cerrar orden
-              </button>
+            <div className="col-12 d-flex justify-content-center gap-2 my-5 py-4">
+              {isLoading && showModal ? (
+                <Loader></Loader>
+              ) : (
+                <>
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleCloseOrder}
+                  >
+                    Cerrar orden
+                  </button>
+                  <button
+                    className="btn btn-danger text-white"
+                    onClick={() => setShowModal(true)}
+                  >
+                    Borrar orden
+                  </button>
+                </>
+              )}
             </div>
           </div>
+          <ConfirmationModal
+            show={showModal}
+            message="¿Estás seguro que deseas borrar la orden? Esto borrará los datos asociados"
+            onConfirm={() => deleteOrder(order_id)}
+            onCancel={() => setShowModal(false)}
+          />
         </>
       ) : (
         //A PARTIR DE ACA EMPIEZA LA SECCIÓN DE ORDEN FINALIZADA
@@ -469,200 +549,206 @@ export const OrderDetails = () => {
               Generar pdf
             </button>
           </div>
-          <div className="row shadow " ref={componentToPrint}>
-            <div className="row mt-5" id="real-estates-detail">
-              <h3 className="text-center p-0">Detalles de la orden</h3>
-              <div className="row p-3">
-                <h4 className="d-inline-block">
-                  {plate && `Matrícula: ${plate}`}
-                </h4>
+          <h3 className="text-center p-0">Detalles de la orden</h3>
+          <div
+            className="mt-5 col-12 shadow-lg border border-1 rounded p-4"
+            ref={componentToPrint}
+            id="real-estates-detail"
+          >
+            <div className="row p-3">
+              <h4 className="d-inline-block">
+                {plate && `Matrícula: ${plate}`}
+              </h4>
+            </div>
+            <div className="row p-3">
+              <div className="col-12 col-md-6 pe-2">
+                <h4>Datos de la orden</h4>
+                <div className=" mt-3">
+                  <label className="">ID de orden:</label>
+                  <div
+                    className="form-control"
+                    style={{ backgroundColor: "#e9ecef" }}
+                  >
+                    {formData.id}
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <label className=""> Kilometros:</label>
+                  <div
+                    className="form-control"
+                    style={{ backgroundColor: "#e9ecef" }}
+                  >
+                    {formatNumber(formData.kilometres.toString()) || ""}
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <label className="">Estado:</label>
+                  <div
+                    className="form-control"
+                    style={{ backgroundColor: "#e9ecef" }}
+                  >
+                    {formData.state == 1 ? "Cerrada" : "Abierta"}
+                  </div>
+                </div>
+                <div className=" mt-3">
+                  <label className="">Creacion - Cierre</label>
+                  <div
+                    className="form-control"
+                    style={{ backgroundColor: "#e9ecef" }}
+                  >
+                    {formData.date_in?.split("-").reverse().join("-") || ""} /{" "}
+                    {formData.date_out?.split("-").reverse().join("-") || ""}
+                  </div>
+                </div>
               </div>
-              <div className="row p-3">
-                <div className="col-12 col-md-6 pe-2">
-                  <h4>Datos de la orden</h4>
+              <div className="col-12 col-md-6 pt-5 pt-md-0 ps-2">
+                <h4>Datos del cliente</h4>
+                <div>
                   <div className=" mt-3">
-                    <label className="">ID de orden:</label>
+                    <label className="">Nombre/s:</label>
                     <div
                       className="form-control"
                       style={{ backgroundColor: "#e9ecef" }}
                     >
-                      {formData.id}
-                    </div>
-                  </div>
-                  <div className="mt-3">
-                    <label className=""> Kilometros:</label>
-                    <div
-                      className="form-control"
-                      style={{ backgroundColor: "#e9ecef" }}
-                    >
-                      {formatNumber(formData.kilometres.toString()) || ""}
-                    </div>
-                  </div>
-                  <div className="mt-3">
-                    <label className="">Estado:</label>
-                    <div
-                      className="form-control"
-                      style={{ backgroundColor: "#e9ecef" }}
-                    >
-                      {formData.state || ""}
+                      {formData.name || ""}
                     </div>
                   </div>
                   <div className=" mt-3">
-                    <label className="">Creacion:</label>
+                    <label className="">Apellido/s:</label>
                     <div
                       className="form-control"
                       style={{ backgroundColor: "#e9ecef" }}
                     >
-                      {formData.date_in?.split("-").reverse().join("-") || ""}
+                      {formData.surname || ""}
                     </div>
                   </div>
-                </div>
-                <div className="col-12 col-md-6 pt-5 pt-md-0 ps-2">
-                  <h4>Datos del cliente</h4>
-                  <div>
-                    <div className=" mt-3">
-                      <label className="">Nombre/s:</label>
-                      <div
-                        className="form-control"
-                        style={{ backgroundColor: "#e9ecef" }}
-                      >
-                        {formData.name || ""}
-                      </div>
+                  <div className=" mt-3">
+                    <label className="">Email:</label>
+                    <div
+                      className="form-control"
+                      style={{ backgroundColor: "#e9ecef" }}
+                    >
+                      {formData.email || "No especificado"}
                     </div>
-                    <div className=" mt-3">
-                      <label className="">Apellido/s:</label>
-                      <div
-                        className="form-control"
-                        style={{ backgroundColor: "#e9ecef" }}
-                      >
-                        {formData.surname || ""}
-                      </div>
-                    </div>
-                    <div className=" mt-3">
-                      <label className="">Email:</label>
-                      <div
-                        className="form-control"
-                        style={{ backgroundColor: "#e9ecef" }}
-                      >
-                        {formData.email || ""}
-                      </div>
-                    </div>
-                    <div className=" mt-3">
-                      <label className="">Teléfono:</label>
-                      <div
-                        className="form-control"
-                        style={{ backgroundColor: "#e9ecef" }}
-                      >
-                        {formData.phone || ""}
-                      </div>
+                  </div>
+                  <div className=" mt-3">
+                    <label className="">Teléfono:</label>
+                    <div
+                      className="form-control"
+                      style={{ backgroundColor: "#e9ecef" }}
+                    >
+                      {formData.phone || "No especificado"}
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="mt-5 p-0">
-                <h3 className="text-center">Anomalías</h3>
-                <div className="col-xs-12 col-md-12 p-3">
-                  <div>
-                    <h5>Anomalías declaradas</h5>
-                    <ul className="p-0">
-                      {formDataAnomalies.length > 0
-                        ? formDataAnomalies.map((each) => {
-                            return (
-                              <div
-                                className="form-control mb-2"
-                                style={{ backgroundColor: "#e9ecef" }}
-                              >
-                                {each.description}
-                              </div>
-                            );
-                          })
-                        : "Esta orden no tiene anomalías asociadas"}
-                    </ul>
-                  </div>
+            </div>
+            <div className="mt-5 p-0">
+              <h3 className="text-center">Anomalías</h3>
+              <div className="col-xs-12 col-md-12 p-3">
+                <div>
+                  <h5>Anomalías declaradas</h5>
+                  <ul className="p-0">
+                    {formDataAnomalies.length > 0
+                      ? formDataAnomalies.map((each) => {
+                          return (
+                            <div
+                              key={each.id}
+                              className="form-control mb-2"
+                              style={{ backgroundColor: "#e9ecef" }}
+                            >
+                              {each.description}
+                            </div>
+                          );
+                        })
+                      : "Esta orden no tiene anomalías asociadas"}
+                  </ul>
                 </div>
               </div>
-              <div className="mt-2">
-                <h3 className="text-center">Trabajos</h3>
+            </div>
+            <div className="mt-2">
+              <h3 className="text-center">Trabajos</h3>
+              {dataToPDF &&
+                dataToPDF.works.length > 0 &&
+                dataToPDF.works.map((each) => {
+                  return (
+                    <div
+                      key={each.id}
+                      className="form-control mb-2"
+                      style={{ backgroundColor: "#e9ecef" }}
+                    >
+                      {each}
+                    </div>
+                  );
+                })}
+            </div>
+            <div className="mt-2">
+              <h3 className="text-center">Alumnos</h3>
+              {dataToPDF &&
+                dataToPDF.students.length > 0 &&
+                dataToPDF.students.map((each) => {
+                  return (
+                    <div
+                      key={each.id}
+                      className="form-control mb-2"
+                      style={{ backgroundColor: "#e9ecef" }}
+                    >
+                      {each}
+                    </div>
+                  );
+                })}
+            </div>
+            <div className="mt-2">
+              <h3 className="text-center">Matariales</h3>
+              <table class="table table-striped table-hover">
+                <tr>
+                  <td>Descripción</td>
+                  <td>Cantidad</td>
+                  <td>Precio</td>
+                  <td>Total</td>
+                </tr>
                 {dataToPDF &&
-                  dataToPDF.works.length > 0 &&
-                  dataToPDF.works.map((each) => {
+                  dataToPDF.materials.length > 0 &&
+                  dataToPDF.materials.map((each) => {
                     return (
-                      <div
-                        className="form-control mb-2"
-                        style={{ backgroundColor: "#e9ecef" }}
-                      >
-                        {each}
-                      </div>
+                      <tr key={each.id}>
+                        <td style={{ backgroundColor: "#e9ecef" }}>
+                          {" "}
+                          {each.description}
+                        </td>
+                        <td style={{ backgroundColor: "#e9ecef" }}>
+                          {" "}
+                          {each.quantity}
+                        </td>
+                        <td style={{ backgroundColor: "#e9ecef" }}>
+                          {" "}
+                          {each.price}€
+                        </td>
+                        <td style={{ backgroundColor: "#e9ecef" }}>
+                          {each.price * each.quantity}€
+                        </td>
+                      </tr>
                     );
                   })}
-              </div>
-              <div className="mt-2">
-                <h3 className="text-center">Alumnos</h3>
-                {dataToPDF &&
-                  dataToPDF.students.length > 0 &&
-                  dataToPDF.students.map((each) => {
-                    return (
-                      <div
-                        className="form-control mb-2"
-                        style={{ backgroundColor: "#e9ecef" }}
-                      >
-                        {each}
-                      </div>
-                    );
-                  })}
-              </div>
-              <div className="mt-2">
-                <h3 className="text-center">Matariales</h3>
-                <table class="table table-striped table-hover">
-                  <tr>
-                    <td>Descripción</td>
-                    <td>Cantidad</td>
-                    <td>Precio</td>
-                    <td>Total</td>
-                  </tr>
-                  {dataToPDF &&
-                    dataToPDF.materials.length > 0 &&
-                    dataToPDF.materials.map((each) => {
-                      return (
-                        <tr>
-                          <td style={{ backgroundColor: "#e9ecef" }}>
-                            {" "}
-                            {each.description}
-                          </td>
-                          <td style={{ backgroundColor: "#e9ecef" }}>
-                            {" "}
-                            {each.quantity}
-                          </td>
-                          <td style={{ backgroundColor: "#e9ecef" }}>
-                            {" "}
-                            {each.price}€
-                          </td>
-                          <td style={{ backgroundColor: "#e9ecef" }}>
-                            {each.price * each.quantity}€
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  <tr>
-                    <td
-                      colSpan="3"
-                      className="h5"
-                      style={{ backgroundColor: "#e9ecef" }}
-                    >
-                      Total
-                    </td>
-                    <td className="h5" style={{ backgroundColor: "#e9ecef" }}>
-                      {dataToPDF &&
-                        dataToPDF.materials
-                          .reduce((prev, acc) => {
-                            return prev + acc.price * acc.quantity;
-                          }, 0)
-                          .toString()}
-                      €
-                    </td>
-                  </tr>
-                </table>
-              </div>
+                <tr>
+                  <td
+                    colSpan="3"
+                    className="h5"
+                    style={{ backgroundColor: "#e9ecef" }}
+                  >
+                    Total
+                  </td>
+                  <td className="h5" style={{ backgroundColor: "#e9ecef" }}>
+                    {dataToPDF &&
+                      dataToPDF.materials
+                        .reduce((prev, acc) => {
+                          return prev + acc.price * acc.quantity;
+                        }, 0)
+                        .toString()}
+                    €
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
 

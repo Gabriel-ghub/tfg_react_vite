@@ -5,6 +5,7 @@ import { ConfirmationModal } from "../../components/ConfirmationModal";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
 import useHttp from "../../hooks/useHttp";
+import { Error } from "../../components/Error";
 
 export const Anomaly = ({
   id,
@@ -28,6 +29,7 @@ export const Anomaly = ({
     formState: { errors },
     setValue,
     getValues,
+    clearErrors
   } = useForm({
     defaultValues: {
       id: id,
@@ -60,6 +62,7 @@ export const Anomaly = ({
 
   const handleCancelEdit = () => {
     setEditingAnomalies(false);
+    clearErrors();
     setValue("description", description);
   };
 
@@ -83,7 +86,7 @@ export const Anomaly = ({
   return (
     <>
       <form onSubmit={handleSubmit(handleSubmitAnomaly)} className="p-0">
-        <li className="d-flex my-2 gap-2">
+        <li className="d-flex flex-column flex-md-row my-2 gap-2">
           {editingAnomalies.id != id ? (
             <>
               <p
@@ -107,16 +110,14 @@ export const Anomaly = ({
                     message: "Mínimo 6 caracteres",
                   },
                   maxLength: {
-                    value: 100,
-                    message: "Máximo 100 caracteres",
+                    value: 200,
+                    message: "Máximo 200 caracteres",
                   },
                 })}
               ></input>
-              {errors && errors.description && (
-                <p>{errors.kilometres.message}</p>
-              )}
             </>
           )}
+
           {editingAnomalies.id != id ? (
             isLoading ? (
               "Borrando..."
@@ -154,6 +155,9 @@ export const Anomaly = ({
             </>
           )}
         </li>
+        {errors && errors.description && errors.description.message && (
+          <Error error={errors.description.message} />
+        )}
       </form>
       <ConfirmationModal
         show={showModal}

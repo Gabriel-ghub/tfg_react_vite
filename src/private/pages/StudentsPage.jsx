@@ -112,7 +112,7 @@ export const StudentsPage = () => {
 
       <div className="row mt-5">
         <h2 className="text-center">Agregar nuevo alumno</h2>
-        {isLoading && <Loader />} 
+        {isLoading && <Loader />}
         {options.length > 0 && (
           <div className="mb-3 col-12 shadow-lg p-4">
             <div
@@ -165,7 +165,7 @@ export const StudentsPage = () => {
                   data-bs-parent="#accordionFlushExample"
                 >
                   <div className="accordion-body">
-                    {courses.length > 0 ? (
+                    {options.length > 0 ? (
                       <FormAddStudentsCSV
                         options={options}
                       ></FormAddStudentsCSV>

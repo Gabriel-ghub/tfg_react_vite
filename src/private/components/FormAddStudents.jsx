@@ -58,6 +58,9 @@ export const FormAddStudents = ({ options}) => {
     );
     if (response) {
       setSuccessRequest(response.message);
+      setTimeout(() => {
+        setSuccessRequest(false);
+      }, 2000);
       setSelectedOption(null)
       reset();
     }
@@ -65,6 +68,7 @@ export const FormAddStudents = ({ options}) => {
 
   const handleSelect = (data) => {
     setSelectedOption(data);
+
     setCourseId(data.value);
     setValue("course", data.value);
   };
@@ -81,6 +85,7 @@ export const FormAddStudents = ({ options}) => {
             <input
               type="text"
               className="form-control"
+              maxLength="50"
               {...register("name", {
                 required: {
                   value: true,
@@ -91,7 +96,7 @@ export const FormAddStudents = ({ options}) => {
                   message: "El nombre debe tener al menos 3 caracteres",
                 },
                 maxLength: {
-                  value: 30,
+                  value: 50,
                   message: "El nombre debe tener menos de 30 caracteres",
                 },
               })}
@@ -108,6 +113,7 @@ export const FormAddStudents = ({ options}) => {
             </label>
             <input
               type="text"
+              maxLength="50"
               className="form-control"
               {...register("surname", {
                 required: {
@@ -119,7 +125,7 @@ export const FormAddStudents = ({ options}) => {
                   message: "El apellido debe tener al menos 3 caracteres",
                 },
                 maxLength: {
-                  value: 40,
+                  value: 50,
                   message: "El apellido debe tener menos de 40 caracteres",
                 },
               })}
@@ -133,12 +139,13 @@ export const FormAddStudents = ({ options}) => {
           </div>
         </div>
         <div className="row">
-          <div className="col-6">
+          <div className="col-12 col-md-6">
             <label htmlFor="name" className="form-label">
               Email
             </label>
             <input
               type="email"
+              maxLength="50"
               className="form-control"
               {...register("email", {
                 required: {
@@ -150,7 +157,7 @@ export const FormAddStudents = ({ options}) => {
                   message: "El email debe tener al menos 3 caracteres",
                 },
                 maxLength: {
-                  value: 40,
+                  value: 50,
                   message: "El email debe tener menos de 40 caracteres",
                 },
                 pattern: {
@@ -164,11 +171,15 @@ export const FormAddStudents = ({ options}) => {
               <Error error={error.email} clearError={clearError} />
             )}
           </div>
-          <div className="col-6">
+          <div className="col-12 col-md-6">
             <label htmlFor="" className="form-label">
               Curso
             </label>
-            <Select options={options} onChange={(data)=>handleSelect(data)} value={selectedOption} />
+            <Select
+              options={options}
+              onChange={(data) => handleSelect(data)}
+              value={selectedOption}
+            />
             {errors && errors.course && <Error error={errors.course.message} />}
             {error && error.course && (
               <Error error={error.course} clearError={clearError} />

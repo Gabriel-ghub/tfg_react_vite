@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useHttp from "../../hooks/useHttp";
 import { useToken } from "../../hooks/useToken";
 import { FormEditCourse } from "../components/FormEditCourse";
 import { Loader } from "../../components/Loader";
 import { BASE_URL } from "../../api/api";
 
+
 const initialForm = {
   name: "",
   year: "",
 };
 export const CourseDetails = () => {
+  const navigate = useNavigate();
   const { course_id } = useParams();
   const [course, setCourse] = useState(initialForm);
   const [students, setStudents] = useState([]);
@@ -29,6 +31,8 @@ export const CourseDetails = () => {
       const response = await sendRequest(url, "GET", null, headers);
       if (response) {
         setCourse(response);
+      }else{
+        navigate("/courses")
       }
     };
     const getStudents = async () => {

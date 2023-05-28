@@ -101,6 +101,7 @@ export const CreateOrder = () => {
                       <label htmlFor="lastName">Nombre/s*</label>
                       <input
                         className="form-control"
+                        maxLength="50"
                         type="text"
                         {...register("name", {
                           required: {
@@ -112,10 +113,8 @@ export const CreateOrder = () => {
                             message: "Máximo 50 caracteres",
                           },
                           pattern: {
-                            value:
-                              /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                            message:
-                              "Solo letras",
+                            value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+                            message: "Solo letras",
                           },
                         })}
                       />
@@ -135,6 +134,7 @@ export const CreateOrder = () => {
                       </label>
                       <input
                         className="form-control"
+                        maxLength="50"
                         type="text"
                         {...register("surname", {
                           required: {
@@ -146,10 +146,8 @@ export const CreateOrder = () => {
                             message: "Máximo 50 caracteres",
                           },
                           pattern: {
-                            value:
-                              /^^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                            message:
-                              "Solo letras",
+                            value: /^^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+                            message: "Solo letras",
                           },
                         })}
                       />
@@ -166,7 +164,7 @@ export const CreateOrder = () => {
                     <div className="form-group">
                       <label htmlFor="phone">Teléfono</label>
                       <input
-                        maxLength={"12"}
+                        maxLength="12"
                         type="text"
                         className="form-control"
                         {...register("phone", {
@@ -189,6 +187,7 @@ export const CreateOrder = () => {
                       <label htmlFor="phone">Email</label>
                       <input
                         type="email"
+                        maxLength="50"
                         className="form-control"
                         {...register("email", {
                           pattern: {

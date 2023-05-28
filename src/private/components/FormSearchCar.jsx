@@ -29,6 +29,7 @@ export const FormSearchCar = () => {
           <input
             className="form-control mt-3 text-center"
             type="text"
+            maxLength="11"
             {...register("plate", {
               required: { value: true, message: "Debe ingresar una matrícula" },
               maxLength: {

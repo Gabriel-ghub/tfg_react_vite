@@ -29,7 +29,6 @@ export const ManageWork = ({ work }) => {
         })
         setCourses(results_courses);
       } catch (error) {
-        console.error(error);
       }
     };
     fetchData();
@@ -102,7 +101,6 @@ export const ManageWork = ({ work }) => {
         setAssignedStudent(temp_assignedStudents)
         setNotAssignedStudent([...notAssignedStudents, dettachStudent])
       }else{
-        console.log("error al desasignar")
       }
 
   }
