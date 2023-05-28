@@ -38,14 +38,13 @@ export const FormEditCourse = ({ course }) => {
       headers
     );
     if (response) {
-      setSuccessMessage("Curso eliminado con éxito");
+      setSuccessMessage("Curso eliminado correctamente.");
       setTimeout(() => {
         navigate(`/courses`);
       }, 1500);
     }
     setShowModal(false);
   };
-
   const onSubmit = async (data) => {
     const { id, name, year } = data;
     const token = getToken();
@@ -77,58 +76,62 @@ export const FormEditCourse = ({ course }) => {
   return (
     <>
       <form className="col-12 col-md-6" onSubmit={handleSubmit(onSubmit)}>
-        <label className="form-label" htmlFor="name">
-          Nombre
-        </label>
-        <input
-          type="text"
-          className="form-control border-success"
-          {...register("name", {
-            required: {
-              value: true,
-              message: "El nombre es requerido",
-            },
-            minLength: {
-              value: 3,
-              message: "El nombre debe tener al menos 3 caracteres",
-            },
-            maxLength: {
-              value: 20,
-              message: "El nombre debe tener menos de 20 caracteres",
-            },
-          })}
-        />
-        {errors && errors.name && <Error error={errors.name.message} />}
-        {error && error.name && (
-          <Error error={error.name} clearError={clearError} />
-        )}
-        <label className="form-label" htmlFor="year">
-          Año
-        </label>
-        <input
-          type="number"
-          className="form-control border-success"
-          {...register("year", {
-            required: {
-              value: true,
-              message: "El año es requerido",
-            },
-            min: {
-              value: 1,
-              message: "El año debe ser mayor a 0",
-            },
-            max: {
-              value: 3000,
-              message: "El año debe ser menor a 3000",
-            },
-          })}
-        />
-        {errors && errors.year && <Error error={errors.year.message} />}
-        {error && error.year && (
-          <Error error={error.year} clearError={clearError} />
-        )}
+        <div className="form-group mb-2">
+          <label className="form-label" htmlFor="name">
+            Nombre
+          </label>
+          <input
+            type="text"
+            className="form-control border-success"
+            {...register("name", {
+              required: {
+                value: true,
+                message: "Campo requerido.",
+              },
+              minLength: {
+                value: 3,
+                message: "El nombre debe tener al menos 3 caracteres.",
+              },
+              maxLength: {
+                value: 20,
+                message: "El nombre debe tener menos de 20 caracteres.",
+              },
+            })}
+          />
+          {errors && errors.name && <Error error={errors.name.message} />}
+          {error && error.name && (
+            <Error error={error.name} clearError={clearError} />
+          )}
+        </div>
+        <div className="form-group">
+          <label className="form-label" htmlFor="year">
+            Año
+          </label>
+          <input
+            type="number"
+            className="form-control border-success"
+            {...register("year", {
+              required: {
+                value: true,
+                message: "Campo requerido.",
+              },
+              min: {
+                value: 1,
+                message: "El año debe ser mayor a 0.",
+              },
+              max: {
+                value: 3000,
+                message: "El año debe ser menor a 3000.",
+              },
+            })}
+          />
+          {errors && errors.year && <Error error={errors.year.message} />}
+          {error && error.year && (
+            <Error error={error.year} clearError={clearError} />
+          )}
+        </div>
         {successMessage && (
-          <div className="alert alert-success">{successMessage}</div>
+          <div className="alert alert-success mt-3">{successMessage}</div>
         )}
         <div className="d-flex justify-content-center mt-3 gap-3">
           {isLoading || successMessage ? (
@@ -149,7 +152,7 @@ export const FormEditCourse = ({ course }) => {
           )}
           <ConfirmationModal
             show={showModal}
-            message="¿Estás seguro que deseas borrar el curso? Esto borrará a todos los alumnos asociados a el y sus trabajos."
+            message="¿Está seguro que desea borrar el curso? Esto borrará a todos los alumnos asociados y sus trabajos."
             onConfirm={() => deleteCourse(course.id)}
             onCancel={() => setShowModal(false)}
           />

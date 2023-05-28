@@ -101,15 +101,15 @@ export const Anomaly = ({
                 {...register("description", {
                   required: {
                     value: true,
-                    message: "Campo requerido",
+                    message: "Este campo requerido.",
                   },
                   minLength: {
                     value: 6,
-                    message: "Mínimo 6 caracteres",
+                    message: "Mínimo 6 caracteres.",
                   },
                   maxLength: {
                     value: 200,
-                    message: "Máximo 200 caracteres",
+                    message: "Máximo 200 caracteres.",
                   },
                 })}
               ></input>
@@ -138,7 +138,7 @@ export const Anomaly = ({
               </div>
             )
           ) : isSending ? (
-            <h5 className="">"Enviando..."</h5>
+            <p>Enviando...</p>
           ) : (
             <>
               <button type="submit" className="btn btn-primary">
@@ -159,7 +159,7 @@ export const Anomaly = ({
       </form>
       <ConfirmationModal
         show={showModal}
-        message="¿Estás seguro que deseas borrar la anomalía?"
+        message="¿Está seguro que desea borrar la anomalía?"
         onConfirm={() => destroyAnomaly(id)}
         onCancel={() => setShowModal(false)}
       />

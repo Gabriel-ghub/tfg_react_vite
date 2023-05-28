@@ -39,7 +39,7 @@ export const NavBar = () => {
                 ></button>
               </div>
               <div className="offcanvas-body">
-                <ul className="navbar-nav justify-content-end flex-grow-1 pe-3 gap-3">
+                <ul className="navbar-nav justify-content-end flex-grow-1 gap-3">
                   {/* <li className="nav-item">
                     <Link className="nav-link text-light" to={"/car"}>
                       Crear orden
@@ -122,7 +122,7 @@ export const NavBar = () => {
                     </Link>
                   </li> */}
                   <button onClick={onLogout} className="btn btn-warning">
-                    Logout
+                    Cerrar sesión
                   </button>
                 </ul>
               </div>

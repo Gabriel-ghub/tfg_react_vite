@@ -37,12 +37,12 @@ const useHttp = () => {
         return responseData;
       } else {
         const errorResponse = await response.json();
-        setError(errorResponse.errors || "Error en la petición");
+        setError(errorResponse.errors || "Error en la petición.");
         setIsLoading(false);
         return null;
       }
     } catch (err) {
-      setError(err.message || "Error en la petición");
+      setError(err.message || "Error en la petición.");
       setIsLoading(false);
       return null;
     }

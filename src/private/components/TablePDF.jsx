@@ -22,7 +22,7 @@ export const TablePDF = ({ data }) => {
         </tr>
         <tr>
           <td>Modelo</td>
-          <td>Kilometros</td>
+          <td>Kilómetros</td>
           <td>Salida</td>
         </tr>
         <tr>

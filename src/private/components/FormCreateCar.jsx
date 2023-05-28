@@ -45,24 +45,27 @@ export const FormCreateCar = ({ setCarFound }) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="col-8 mx-auto">
-        <h3>No existen coincidencias.</h3>
-        <h3>¿Quiere crear un nuevo coche?</h3>
+        <h4>No existen coincidencias.</h4>
+        <h4>¿Quiere crear un nuevo coche?</h4>
         <div className="form-group">
           <label htmlFor="formGroupExampleInput">Matrícula</label>
           <input
             type="text"
             {...register("plate", {
-              required: { value: true, message: "La matrícula es obligatoria" },
+              required: {
+                value: true,
+                message: "Campo requerido.",
+              },
               minLength: {
                 value: 6,
-                message: "La matrícula debe tener minimo 6 caracteres",
+                message: "La matrícula debe tener mínimo 6 caracteres.",
               },
               maxLength: {
                 value: 11,
-                message: "La matrícula debe tener maximo 11 caracteres",
+                message: "La matrícula debe tener máximo 11 caracteres.",
               },
             })}
-            className="form-control"
+            className="form-control mb-2"
           />
           {errors && errors.plate && <Error error={errors.plate.message} />}
           {error && error.plate && (
@@ -73,16 +76,16 @@ export const FormCreateCar = ({ setCarFound }) => {
           <label htmlFor="formGroupExampleInput2">Marca</label>
           <input
             type="text"
-            className="form-control"
+            className="form-control mb-2"
             {...register("brand", {
-              required: { value: true, message: "La marca es obligatoria" },
+              required: { value: true, message: "Campo requerido." },
               minLength: {
                 value: 1,
-                message: "La marca debe tener minimo 1 caracteres",
+                message: "La marca debe tener mínimo 1 caracteres.",
               },
               maxLength: {
                 value: 25,
-                message: "La marca debe tener maximo 25 caracteres",
+                message: "La marca debe tener máximo 25 caracteres.",
               },
             })}
           />
@@ -97,14 +100,14 @@ export const FormCreateCar = ({ setCarFound }) => {
             type="text"
             className="form-control"
             {...register("model", {
-              required: { value: true, message: "El modelo es obligatoria" },
+              required: { value: true, message: "Campo requerido." },
               minLength: {
                 value: 1,
-                message: "La modelo debe tener minimo 1 caracter",
+                message: "El modelo debe tener mínimo 1 caracter.",
               },
               maxLength: {
                 value: 25,
-                message: "El modelo debe tener maximo 25 caracteres",
+                message: "El modelo debe tener máximo 25 caracteres.",
               },
             })}
           />

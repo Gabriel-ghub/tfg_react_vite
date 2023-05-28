@@ -102,3 +102,7 @@ html, #root {
   background-size: var(--bs-accordion-btn-icon-width);
   transition: var(--bs-accordion-btn-icon-transition);
 }
+
+input{
+  font-style: italic;
+}

@@ -152,16 +152,16 @@ export const CardOrder = ({
                     {...register("work_description", {
                       required: {
                         value: true,
-                        message: "Debe ingresar una descripción",
+                        message: "Debe ingresar una descripción.",
                       },
                       maxLength: {
                         value: 200,
                         message:
-                          "La descripción no puede superar los 200 caracteres",
+                          "La descripción no puede superar los 200 caracteres.",
                       },
                     })}
                     className="form-control"
-                    placeholder="Describa aquí los trabajos realizados"
+                    placeholder="Describa aquí los trabajos realizados..."
                     id=""
                     height="100%"
                     cols="30"

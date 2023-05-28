@@ -6,16 +6,11 @@ import { FormEditCourse } from "../components/FormEditCourse";
 import { Loader } from "../../components/Loader";
 import { BASE_URL } from "../../api/api";
 
-
-const initialForm = {
-  name: "",
-  year: "",
-};
+;
 export const CourseDetails = () => {
   const navigate = useNavigate();
   const { course_id } = useParams();
-  const [course, setCourse] = useState(initialForm);
-  const [students, setStudents] = useState([]);
+  const [course, setCourse] = useState(false);
   const { getToken } = useToken();
   const { isLoading, sendRequest } = useHttp();
 
@@ -30,59 +25,24 @@ export const CourseDetails = () => {
       const response = await sendRequest(url, "GET", null, headers);
       if (response) {
         setCourse(response);
-      }else{
-        navigate("/courses")
-      }
-    };
-    const getStudents = async () => {
-      const url = `${BASE_URL}/course/${course_id}/students`;
-      const token = getToken();
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-
-      const response = await sendRequest(url, "GET", null, headers);
-      if (response) {
-        setStudents(response);
+      } else {
+        navigate("/courses");
       }
     };
     getCourse();
-    getStudents();
-  }, [course_id]);
-
-  const columns = [
-    {
-      name: "Nombre",
-      selector: (row) => row.name,
-    },
-    {
-      name: "apellido",
-      selector: (row) => row.surname,
-    },
-    {
-      name: "Detalle",
-      selector: (row) => {
-        return (
-          <Link className="btn btn-warning" to={`/user/${row.id}/detail`}>
-            Detalle
-          </Link>
-        );
-      },
-    },
-  ];
-
-
+  }, []);
 
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : (
+      {isLoading && <Loader />}
+      {course && (
         <div className="container">
-          <Link className="btn btn-primary mt-5" to="/courses">Volver</Link>
-          <div className="row mt-5 shadow-lg py-3">
-            <div className="col-12 d-flex justify-content-center">
+          <Link className="btn btn-primary mt-5" to="/courses">
+            Volver
+          </Link>
+          <div className="row mt-5 ">
+            <h3 className="text-center">Editar datos del curso</h3>
+            <div className="col-12 p-4 shadow-lg d-flex justify-content-center">
               <FormEditCourse course={course} setCourse={setCourse} />
             </div>
           </div>

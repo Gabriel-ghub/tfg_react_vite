@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { BASE_URL } from "../../api/api";
 import { Loader } from "../../components/Loader";
 import { Error } from "../../components/Error";
-import {SuccessMessage} from "../../components/SuccessMessage";
+import { SuccessMessage } from "../../components/SuccessMessage";
 export const FormEditAdmin = () => {
   const { getToken } = useToken();
   const { sendRequest, isLoading, error, clearError } = useHttp();
@@ -20,11 +20,11 @@ export const FormEditAdmin = () => {
     if (data.password1 !== data.password2) {
       setError("password1", {
         type: "custom",
-        message: "Las contraseñas no coinciden",
+        message: "Las contraseñas no coinciden.",
       });
       setError("password2", {
         type: "custom",
-        message: "Las contraseñas no coinciden",
+        message: "Las contraseñas no coinciden.",
       });
       return;
     } else {
@@ -44,31 +44,35 @@ export const FormEditAdmin = () => {
       headers
     );
     if (response) {
-      setSuccessMessaje("Contraseña cambiada correctamente");
+      setSuccessMessaje("Contraseña actualizada correctamente.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="col-12 col-md-4 gap-2">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="col-12 col-md-4 gap-2  text-start"
+    >
       <div className="form-group">
-        <label htmlFor="password_actual">Contraseña actual</label>
+        <label className="form-label" htmlFor="password_actual">
+          Contraseña actual
+        </label>
         <input
           type="password"
           className="form-control"
           id="password_actual"
-          placeholder="Contraseña actual"
           {...register("current_password", {
             required: {
               value: true,
-              message: "Este campo es requerido",
+              message: "Campo requerido.",
             },
             minLength: {
               value: 6,
-              message: "Debe tener al menos 6 caracteres",
+              message: "Debe tener al menos 6 caracteres.",
             },
             maxLength: {
               value: 15,
-              message: "Debe tener menos de 15 caracteres",
+              message: "Debe tener menos de 15 caracteres.",
             },
           })}
         />
@@ -82,24 +86,25 @@ export const FormEditAdmin = () => {
         )}
       </div>
       <div className="form-group">
-        <label htmlFor="name">Nueva contraseña</label>
+        <label className="form-label" htmlFor="name">
+          Nueva contraseña
+        </label>
         <input
           type="password"
           className="form-control"
           id="name"
-          placeholder="Nueva contraseña"
           {...register("password1", {
             required: {
               value: true,
-              message: "Este campo es requerido",
+              message: "Campo requerido.",
             },
             minLength: {
               value: 6,
-              message: "Debe tener al menos 6 caracteres",
+              message: "Debe tener al menos 6 caracteres.",
             },
             maxLength: {
               value: 15,
-              message: "Debe tener menos de 15 caracteres",
+              message: "Debe tener menos de 15 caracteres.",
             },
           })}
         />
@@ -111,24 +116,25 @@ export const FormEditAdmin = () => {
         )}
       </div>
       <div className="form-group">
-        <label htmlFor="password">Repetir contraseña</label>
+        <label className="form-label" htmlFor="password">
+          Repetir contraseña
+        </label>
         <input
           type="password"
           className="form-control"
           id="password"
-          placeholder="Repita la contraseña"
           {...register("password2", {
             required: {
               value: true,
-              message: "Este campo es requerido",
+              message: "Campo requerido.",
             },
             minLength: {
               value: 6,
-              message: "Debe tener al menos 6 caracteres",
+              message: "Debe tener al menos 6 caracteres.",
             },
             maxLength: {
               value: 15,
-              message: "Debe tener menos de 15 caracteres",
+              message: "Debe tener menos de 15 caracteres.",
             },
           })}
         />
@@ -144,7 +150,9 @@ export const FormEditAdmin = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          <button className="btn btn-primary">Guardar</button>
+          <div className="col-12 d-flex justify-content-center mt-2">
+            <button className="btn btn-primary">Guardar</button>
+          </div>
         )}
       </div>
     </form>

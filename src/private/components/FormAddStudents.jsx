@@ -33,7 +33,7 @@ export const FormAddStudents = ({ options }) => {
     if (!courseId) {
       setError("course", {
         type: "custom",
-        message: "Debe seleccionar un curso",
+        message: "Campo requerido.",
       });
       return;
     }
@@ -60,7 +60,7 @@ export const FormAddStudents = ({ options }) => {
       setSuccessRequest(response.message);
       setTimeout(() => {
         setSuccessRequest(false);
-      }, 2000);
+      }, 3000);
       setSelectedOption(null);
       reset();
     }
@@ -76,11 +76,10 @@ export const FormAddStudents = ({ options }) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label className="form-label">Datos del alumno</label>
         <div className="row">
           <div className="col-12 col-md-6">
             <label htmlFor="name" className="form-label">
-              Nombre/s
+              Nombre/s*
             </label>
             <input
               type="text"
@@ -89,15 +88,15 @@ export const FormAddStudents = ({ options }) => {
               {...register("name", {
                 required: {
                   value: true,
-                  message: "El nombre es requerido",
+                  message: "Campo requerido.",
                 },
                 minLength: {
                   value: 3,
-                  message: "El nombre debe tener al menos 3 caracteres",
+                  message: "El nombre debe tener al menos 3 caracteres.",
                 },
                 maxLength: {
                   value: 50,
-                  message: "El nombre debe tener menos de 30 caracteres",
+                  message: "El nombre debe tener menos de 30 caracteres.",
                 },
               })}
             />
@@ -107,9 +106,9 @@ export const FormAddStudents = ({ options }) => {
             )}
           </div>
 
-          <div className="col-12 col-md-6">
+          <div className="col-12 col-md-6 mb-2">
             <label htmlFor="surname" className="form-label">
-              Apellido/s
+              Apellido/s*
             </label>
             <input
               type="text"
@@ -118,15 +117,15 @@ export const FormAddStudents = ({ options }) => {
               {...register("surname", {
                 required: {
                   value: true,
-                  message: "El apellido es requerido",
+                  message: "Campo requerido.",
                 },
                 minLength: {
                   value: 3,
-                  message: "El apellido debe tener al menos 3 caracteres",
+                  message: "El apellido debe tener al menos 3 caracteres.",
                 },
                 maxLength: {
                   value: 50,
-                  message: "El apellido debe tener menos de 40 caracteres",
+                  message: "El apellido debe tener menos de 40 caracteres.",
                 },
               })}
             />
@@ -141,7 +140,7 @@ export const FormAddStudents = ({ options }) => {
         <div className="row">
           <div className="col-12 col-md-6">
             <label htmlFor="name" className="form-label">
-              Email
+              Email*
             </label>
             <input
               type="email"
@@ -150,19 +149,19 @@ export const FormAddStudents = ({ options }) => {
               {...register("email", {
                 required: {
                   value: true,
-                  message: "El email es requerido",
+                  message: "Campo requerido.",
                 },
                 minLength: {
                   value: 3,
-                  message: "El email debe tener al menos 3 caracteres",
+                  message: "El email debe tener al menos 3 caracteres.",
                 },
                 maxLength: {
                   value: 50,
-                  message: "El email debe tener menos de 40 caracteres",
+                  message: "El email debe tener menos de 40 caracteres.",
                 },
                 pattern: {
                   value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                  message: "El correo electrónico no es válido",
+                  message: "El correo electrónico no es válido.",
                 },
               })}
             />
@@ -173,7 +172,7 @@ export const FormAddStudents = ({ options }) => {
           </div>
           <div className="col-12 col-md-6">
             <label htmlFor="" className="form-label">
-              Curso
+              Curso*
             </label>
             <Select
               options={options}

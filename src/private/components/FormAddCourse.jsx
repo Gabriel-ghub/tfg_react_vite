@@ -4,7 +4,6 @@ import useHttp from "../../hooks/useHttp";
 import { useToken } from "../../hooks/useToken";
 import { BASE_URL } from "../../api/api";
 import { Error } from "../../components/Error";
-import { validationType } from "../../validations/validator";
 import { useForm } from "react-hook-form";
 
 
@@ -50,7 +49,6 @@ export const FormAddCourse = ({ courses, setCourses }) => {
       onSubmit={handleSubmit(onSubmit)}
       className="d-flex gap-2 col-12 col-md-6"
     >
-      <label className="form-label">Datos del curso</label>
       <label htmlFor="name" className="form-label">
         Nombre
       </label>
@@ -61,15 +59,15 @@ export const FormAddCourse = ({ courses, setCourses }) => {
         {...register("name", {
           required: {
             value: true,
-            message: "El nombre es requerido",
+            message: "Campo requerido.",
           },
           minLength: {
             value: 2,
-            message: "El nombre debe tener al menos 2 caracteres",
+            message: "El nombre debe tener al menos 2 caracteres.",
           },
           maxLength: {
             value: 50,
-            message: "El nombre debe tener menos de 50 caracteres",
+            message: "El nombre debe tener menos de 50 caracteres.",
           },
         })}
       />
@@ -87,15 +85,15 @@ export const FormAddCourse = ({ courses, setCourses }) => {
         {...register("year", {
           required: {
             value: true,
-            message: "El año es requerido",
+            message: "Campo requerido.",
           },
           minLength: {
             value: 2,
-            message: "El año debe tener al menos 2 caracteres",
+            message: "El año debe tener mínimo 2 números.",
           },
           maxLength: {
             value: 4,
-            message: "El año debe tener menos de 4 caracteres",
+            message: "El año debe tener máximo de 4 números.",
           },
         })}
       />
@@ -107,7 +105,7 @@ export const FormAddCourse = ({ courses, setCourses }) => {
       {!isLoading && (
         <div className="col-12 d-flex justify-content-center">
           <button type="submit" className="btn btn-primary mt-3">
-            Agregar
+            Crear
           </button>
         </div>
       )}

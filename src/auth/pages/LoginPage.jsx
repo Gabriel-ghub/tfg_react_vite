@@ -41,7 +41,7 @@ export const LoginPage = () => {
                   {...register("email", {
                     required: {
                       value: true,
-                      message: "El email es requerido",
+                      message: "Campo requerido.",
                     },
                   })}
                 />
@@ -58,11 +58,11 @@ export const LoginPage = () => {
                   {...register("password", {
                     required: {
                       value: true,
-                      message: "La contraseña es requerida",
+                      message: "Campo requerido.",
                     },
                     minLength: {
                       value: 6,
-                      message: "La contraseña debe tener al menos 6 caracteres",
+                      message: "La contraseña debe tener al menos 6 caracteres.",
                     },
                   })}
                 />

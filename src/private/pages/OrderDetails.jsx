@@ -13,7 +13,6 @@ import { WorksAndMaterials } from "../components/WorksAndMaterials";
 import { Error } from "../../components/Error";
 import { useToken } from "../../hooks/useToken";
 import { ConfirmationModal } from "../../components/ConfirmationModal";
-
 export const OrderDetails = () => {
   const navigate = useNavigate();
   const { order_id } = useParams();
@@ -226,13 +225,13 @@ export const OrderDetails = () => {
                   <div className="col-12 col-md-6 pe-2">
                     <h4>Datos de la orden</h4>
                     <div className=" mt-3">
-                      <label className="">ID de orden:</label>
+                      <label className="">ID de orden</label>
                       <div className="form-control bg-success">
                         {formData.id}
                       </div>
                     </div>
                     <div className="mt-3">
-                      <label className=""> Kilometros:</label>
+                      <label className=""> Kilómetros</label>
                       {editing ? (
                         <>
                           <input
@@ -241,15 +240,15 @@ export const OrderDetails = () => {
                             {...register("kilometres", {
                               required: {
                                 value: true,
-                                message: "Campo requerido",
+                                message: "Campo requerido.",
                               },
                               maxLength: {
                                 value: 10,
-                                message: "Longitud maxima 10 caracteres",
+                                message: "Longitud máxima 10 caracteres.",
                               },
                               minLength: {
                                 value: 1,
-                                message: "Longitud minima 1 caracter",
+                                message: "Longitud mínima 1 caracter.",
                               },
                             })}
                             className="form-control"
@@ -275,7 +274,7 @@ export const OrderDetails = () => {
                       )}
                     </div>
                     <div className="mt-3">
-                      <label className="">Estado:</label>
+                      <label className="">Estado</label>
                       <div
                         className="form-control"
                         style={{ backgroundColor: "#e9ecef" }}
@@ -284,7 +283,7 @@ export const OrderDetails = () => {
                       </div>
                     </div>
                     <div className=" mt-3">
-                      <label className="">Creacion:</label>
+                      <label className="">Creación</label>
                       <div className="form-control bg-success">
                         {formData.date_in?.split("-").reverse().join("-") || ""}
                       </div>
@@ -294,7 +293,7 @@ export const OrderDetails = () => {
                     <h4>Datos del cliente</h4>
                     <div>
                       <div className=" mt-3">
-                        <label className="">Nombre/s:</label>
+                        <label className="">Nombre/s</label>
                         {editing ? (
                           <>
                             <input
@@ -302,11 +301,11 @@ export const OrderDetails = () => {
                               {...register("name", {
                                 required: {
                                   value: true,
-                                  message: "Campo requerido",
+                                  message: "Campo requerido.",
                                 },
                                 maxLength: {
                                   value: 50,
-                                  message: "Longitud máxima 50",
+                                  message: "Longitud máxima 50 caracteres.",
                                 },
                               })}
                               className="form-control"
@@ -332,7 +331,7 @@ export const OrderDetails = () => {
                         )}
                       </div>
                       <div className=" mt-3">
-                        <label className="">Apellido/s:</label>
+                        <label className="">Apellido/s</label>
                         {editing ? (
                           <>
                             <input
@@ -370,7 +369,7 @@ export const OrderDetails = () => {
                         )}
                       </div>
                       <div className=" mt-3">
-                        <label className="">Email:</label>
+                        <label className="">Email</label>
                         {editing ? (
                           <>
                             <input
@@ -409,7 +408,7 @@ export const OrderDetails = () => {
                         )}
                       </div>
                       <div className=" mt-3">
-                        <label className="">Teléfono:</label>
+                        <label className="">Teléfono</label>
                         {editing ? (
                           <>
                             <input
@@ -536,7 +535,7 @@ export const OrderDetails = () => {
           </div>
           <ConfirmationModal
             show={showModal}
-            message="¿Estás seguro que deseas borrar la orden? Esto borrará los datos asociados"
+            message="¿Está seguro que desea borrar la orden? Esto borrará los datos asociados."
             onConfirm={() => deleteOrder(order_id)}
             onCancel={() => setShowModal(false)}
           />
@@ -567,7 +566,7 @@ export const OrderDetails = () => {
               <div className="col-12 col-md-6 pe-2">
                 <h4>Datos de la orden</h4>
                 <div className=" mt-3">
-                  <label className="">ID de orden:</label>
+                  <label className="">ID de orden</label>
                   <div
                     className="form-control"
                     style={{ backgroundColor: "#e9ecef" }}
@@ -576,7 +575,7 @@ export const OrderDetails = () => {
                   </div>
                 </div>
                 <div className="mt-3">
-                  <label className=""> Kilometros:</label>
+                  <label className=""> Kilómetros</label>
                   <div
                     className="form-control"
                     style={{ backgroundColor: "#e9ecef" }}
@@ -585,7 +584,7 @@ export const OrderDetails = () => {
                   </div>
                 </div>
                 <div className="mt-3">
-                  <label className="">Estado:</label>
+                  <label className="">Estado</label>
                   <div
                     className="form-control"
                     style={{ backgroundColor: "#e9ecef" }}
@@ -594,7 +593,9 @@ export const OrderDetails = () => {
                   </div>
                 </div>
                 <div className=" mt-3">
-                  <label className="">Creacion - Cierre</label>
+                  <label className="">
+                    Fecha de creación - Fecha de cierre
+                  </label>
                   <div
                     className="form-control"
                     style={{ backgroundColor: "#e9ecef" }}
@@ -608,7 +609,7 @@ export const OrderDetails = () => {
                 <h4>Datos del cliente</h4>
                 <div>
                   <div className=" mt-3">
-                    <label className="">Nombre/s:</label>
+                    <label className="">Nombre/s</label>
                     <div
                       className="form-control"
                       style={{ backgroundColor: "#e9ecef" }}
@@ -617,7 +618,7 @@ export const OrderDetails = () => {
                     </div>
                   </div>
                   <div className=" mt-3">
-                    <label className="">Apellido/s:</label>
+                    <label className="">Apellido/s</label>
                     <div
                       className="form-control"
                       style={{ backgroundColor: "#e9ecef" }}
@@ -626,7 +627,7 @@ export const OrderDetails = () => {
                     </div>
                   </div>
                   <div className=" mt-3">
-                    <label className="">Email:</label>
+                    <label className="">Email</label>
                     <div
                       className="form-control"
                       style={{ backgroundColor: "#e9ecef" }}
@@ -635,7 +636,7 @@ export const OrderDetails = () => {
                     </div>
                   </div>
                   <div className=" mt-3">
-                    <label className="">Teléfono:</label>
+                    <label className="">Teléfono</label>
                     <div
                       className="form-control"
                       style={{ backgroundColor: "#e9ecef" }}
@@ -702,7 +703,7 @@ export const OrderDetails = () => {
                 })}
             </div>
             <div className="mt-2">
-              <h3 className="text-center">Matariales</h3>
+              <h3 className="text-center">Materiales</h3>
               <table class="table table-striped table-hover">
                 <tr>
                   <td>Descripción</td>
@@ -734,14 +735,10 @@ export const OrderDetails = () => {
                     );
                   })}
                 <tr>
-                  <td
-                    colSpan="3"
-                    className="h5"
-                    style={{ backgroundColor: "#e9ecef" }}
-                  >
+                  <td colSpan="3" style={{ backgroundColor: "#e9ecef" }}>
                     Total
                   </td>
-                  <td className="h5" style={{ backgroundColor: "#e9ecef" }}>
+                  <td style={{ backgroundColor: "#e9ecef" }}>
                     {dataToPDF &&
                       dataToPDF.materials
                         .reduce((prev, acc) => {

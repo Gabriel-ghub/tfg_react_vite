@@ -61,11 +61,15 @@ export const StudentsPage = () => {
       selector: (row) => row.name,
     },
     {
-      name: "email",
+      name: "Apellidos",
+      selector: (row) => row.surname,
+    },
+    {
+      name: "Email",
       selector: (row) => row.email,
     },
     {
-      name: "Editar datos",
+      name: "",
       selector: (row) => {
         return (
           <Link className="btn btn-primary" to={`/student/${row.id}/detail`}>
@@ -100,7 +104,7 @@ export const StudentsPage = () => {
                 />
                 {isLoading && <Loader />}
                 {courseId && !isLoading && students.length < 1 && (
-                  <div>Este curso no tiene estudiantes</div>
+                  <p className="mt-2">Este curso no tiene alumnos.</p>
                 )}
               </div>
               <div className="col-12">
@@ -136,7 +140,7 @@ export const StudentsPage = () => {
                     aria-expanded="false"
                     aria-controls="flush-collapseOne"
                   >
-                    Datos
+                    Indicar datos del alumno
                   </button>
                 </h2>
                 <div
@@ -162,7 +166,7 @@ export const StudentsPage = () => {
                     aria-expanded="false"
                     aria-controls="flush-collapseTwo"
                   >
-                    Mediante fichero CSV
+                    Agregar alumnos mediante fichero CSV
                   </button>
                 </h2>
                 <div

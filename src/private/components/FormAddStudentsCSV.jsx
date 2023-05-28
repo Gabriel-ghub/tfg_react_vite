@@ -49,7 +49,7 @@ export const FormAddStudentsCSV = ({ options }) => {
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-12 col-md-6">
-            <label className="form-label">Archivo CSV:</label>
+            <label className="form-label">Archivo CSV</label>
             <input
               type="file"
               className="form-control"

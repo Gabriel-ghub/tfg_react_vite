@@ -69,6 +69,7 @@ export const CarsPage = () => {
   }, []);
 
   const onSubmit = (data) => {
+    console.log(data)
     setFilterMessage(false);
     const result_filter = cars.filter((car) => {
       return car.plate === data.value;
@@ -76,7 +77,7 @@ export const CarsPage = () => {
     if (result_filter.length > 0) {
       setFiltered(result_filter);
     }else{
-      setFilterMessage("No se han encontrado coincidencias");
+      setFilterMessage("No se han encontrado coincidencias.");
     }
   };
 
@@ -94,7 +95,7 @@ export const CarsPage = () => {
         <div className="col-12 shadow-lg p-4 rounded">
           <form onSubmit={handleSubmit(onSubmit)} className="col-6">
             <label htmlFor="" className="form-label">
-              Matricula
+              Buscar matrícula
             </label>
             <input
               type="text"
@@ -102,10 +103,10 @@ export const CarsPage = () => {
               {...register("value", {
                 required: {
                   value: true,
-                  message: "Campo requerido",
+                  message: "Campo requerido.",
                 },
-                minLength: { value: 6, message: "Mínimo 6 caracteres" },
-                maxLength: { value: 12, message: "Máximo 12 caracteres" },
+                minLength: { value: 6, message: "Mínimo 6 caracteres." },
+                maxLength: { value: 12, message: "Máximo 12 caracteres." },
               })}
               className="form-control"
             />
@@ -114,7 +115,7 @@ export const CarsPage = () => {
             )}
             {filterMessage && <Error error={filterMessage} />}
             <div className="col-12 d-flex gap-2">
-              <button className="btn btn-primary mt-2">Buscar</button>
+              <button type="submit" className="btn btn-primary mt-2">Buscar</button>
               <button type="reset"
                 className="btn btn-warning mt-2"
                 onClick={handleCleanForm}
@@ -125,7 +126,7 @@ export const CarsPage = () => {
           </form>
           {!isLoading && cars.length < 1 && <p>No hay coches registrados</p>}
           {!isLoading && cars.length > 0 && (
-            <DataTable columns={columns} data={cars} pagination />
+            <DataTable columns={columns} data={filtered && filtered.length > 0 ? filtered : cars} pagination />
           )}
         </div>
       </div>

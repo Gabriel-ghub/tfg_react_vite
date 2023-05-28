@@ -20,6 +20,7 @@ export const OrdersPage = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues
   } = useForm({
     reValidateMode: "onSubmit",
   });
@@ -28,17 +29,16 @@ export const OrdersPage = () => {
 
   useEffect(() => {
     const token = getToken();
-   
-    const fetchData = async () => {
 
-        const url = `${BASE_URL}/order/list`;
-        const response = await sendRequest(url, "GET", null, {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        });
-        if(response){
-          setOrders(response);
-        }
+    const fetchData = async () => {
+      const url = `${BASE_URL}/order/list`;
+      const response = await sendRequest(url, "GET", null, {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      });
+      if (response) {
+        setOrders(response);
+      }
     };
     fetchData();
   }, []);
@@ -62,8 +62,13 @@ export const OrdersPage = () => {
       sortable: true,
     },
     {
-      name: "Nombre",
+      name: "Nombre del cliente",
       selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Apellido del cliente",
+      selector: (row) => row.surname,
       sortable: true,
     },
     {
@@ -73,7 +78,7 @@ export const OrdersPage = () => {
     },
     {
       name: "Fecha de entrada",
-      selector: (row) => row.date_in,
+      selector: (row) => row.date_in.split("-").reverse().join("-"),
       sortable: true,
     },
     {
@@ -139,25 +144,26 @@ export const OrdersPage = () => {
         <div className="row mt-5">
           <h2 className="text-center">Listado de órdenes</h2>
           <div className="col-12 p-4 shadow-lg">
-            <h4>Filtro</h4>
+            <h4>Buscar orden</h4>
             <form onSubmit={handleSubmit(onSubmit)} className="col-12 col-md-4">
               <div className="form-group">
+                <select className="form-select mb-2" {...register("filter")}>
+                  <option value="plate" className="">
+                    Matrícula
+                  </option>
+                  <option value="name">Nombre</option>
+                  <option value="surname">Apellidos</option>
+                </select>
                 <input
+                  placeholder="Introduce la información..."
                   type="text"
                   className="form-control"
                   {...register("value", validations)}
                 />
-                <select className="form-select mt-2" {...register("filter")}>
-                  <option value="plate" className="">
-                    Matricula
-                  </option>
-                  <option value="name">Nombre</option>
-                  <option value="surname">Apellido</option>
-                </select>
               </div>
               {filterMessage && <Error error={filterMessage} />}
-              {errors && errors.value && (
-                <p className="my-1">{errors.value.message}</p>
+              {errors && errors.value && errors.value.message && (
+                <Error error={errors.value.message} />
               )}
               {!isLoading && (
                 <div className="mt-3 d-flex gap-2">
@@ -172,15 +178,15 @@ export const OrdersPage = () => {
             </form>
             {isLoading && <Loader></Loader>}
 
-            {!isLoading && orders.length > 0 
-            ? (
+            {!isLoading && orders.length > 0 ? (
               <DataTable
                 columns={columns}
                 data={filtered.length > 0 ? filtered : orders}
                 pagination
               />
-            ):
-            <p className="text-center">No hay órdenes</p>}
+            ) : (
+              !isLoading && <p className="text-center">No hay órdenes</p>
+            )}
           </div>
         </div>
       </Main>

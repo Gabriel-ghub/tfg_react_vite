@@ -20,7 +20,7 @@ export const AddAnomaly = ({ order, setAnomalies, setFormDataAnomalies }) => {
 
   const onAddAnomaly = async (data) => {
     if(data.description.trim().length === 0){
-      setError("description", {type: "custom", message: "No puede estar vacío"})
+      setError("description", {type: "custom", message: "Este campo puede estar vacío."})
       return;
     }
     const body = {
@@ -48,19 +48,19 @@ export const AddAnomaly = ({ order, setAnomalies, setFormDataAnomalies }) => {
   return (
     <form className="d-flex flex-column" onSubmit={handleSubmit(onAddAnomaly)}>
       <div className="form-group">
-        <label className="required-field text-bold h5">Agregar anomalías</label>
+        <label className="required-field h5 mb-3">Agregar anomalías</label>
         <input
           className="form-control"
           type="text"
-          placeholder="Ejemplo: Ruido en la rueda derecha"
+          placeholder="Ruido en la rueda derecha"
           {...register("description", {
             required: {
               value: true,
-              message: "Este campo es requerido",
+              message: "Campo requerido.",
             },
             minLength: {
               value: 3,
-              message: "Debe tener al menos 5 caracteres",
+              message: "Debe tener al menos 5 caracteres.",
             },
           })}
         />

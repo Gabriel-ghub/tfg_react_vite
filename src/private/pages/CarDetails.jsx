@@ -90,7 +90,10 @@ export const CarDetails = () => {
       );
       if (response) {
         setCar(response);
-        setSuccessMessage("Actualizado correctamente");
+        setSuccessMessage("Actualizado correctamente.");
+        setTimeout(() => {
+          navigate("/cars");
+        }, 2500);
       }
     }
   };
@@ -104,7 +107,7 @@ export const CarDetails = () => {
     };
     const response = await sendRequest(url_delete_car, "DELETE", null, headers);
     if (response) {
-      setSuccessMessage("Eliminado correctamente");
+      setSuccessMessage("Eliminado correctamente.");
       setTimeout(() => {
         navigate("/cars");
       }, 2000);
@@ -134,36 +137,37 @@ export const CarDetails = () => {
                 onSubmit={handleSubmit(onSubmit)}
                 className="col-12 col-md-6 gap-2"
               >
-                {changePlate && (
-                  <>
-                    <label htmlFor="">Matricula</label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      {...register("plate", {
-                        required: {
-                          value: true,
-                          message: "Este campo es requerido",
-                        },
-                        maxLength: {
-                          value: 10,
-                          message:
-                            "La matricula debe tener 10 caracteres maximo",
-                        },
-                      })}
-                      maxLength="10"
-                    />
-                  </>
-                )}
-
-                <div className="d-flex flex-column align-items-start">
-                  <label htmlFor="">Cambiar la matrícula</label>
+                <div className="d-flex gap-2 align-items-start">
+                  <label htmlFor="">
+                    Marcar este campo si desea cambiar la matrícula
+                  </label>
                   <input
                     type="checkbox"
                     className="form-check-input"
                     onChange={() => handleChangePlate()}
                   />
                 </div>
+                {changePlate && (
+                  <>
+                    <label htmlFor="">Matrícula</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      {...register("plate", {
+                        required: {
+                          value: true,
+                          message: "Campo requerido.",
+                        },
+                        maxLength: {
+                          value: 10,
+                          message:
+                            "La matrícula debe tener 10 caracteres máximo.",
+                        },
+                      })}
+                      maxLength="10"
+                    />
+                  </>
+                )}
                 {error && error.plate && (
                   <Error error={error.plate} clearError={clearError} />
                 )}
@@ -178,11 +182,11 @@ export const CarDetails = () => {
                   {...register("brand", {
                     required: {
                       value: true,
-                      message: "Este campo es requerido",
+                      message: "Campo requerido.",
                     },
                     maxLength: {
                       value: 25,
-                      message: "La marca debe tener 25 caracteres maximo",
+                      message: "La marca debe tener 25 caracteres máximo.",
                     },
                   })}
                 />
@@ -200,11 +204,11 @@ export const CarDetails = () => {
                   {...register("model", {
                     required: {
                       value: true,
-                      message: "Este campo es requerido",
+                      message: "Campo requerido.",
                     },
                     maxLength: {
                       value: 25,
-                      message: "El modelo debe tener 25 caracteres maximo",
+                      message: "El modelo debe tener 25 caracteres máximo.",
                     },
                   })}
                   maxLength="25"
@@ -240,7 +244,7 @@ export const CarDetails = () => {
             </div>
             <ConfirmationModal
               show={showModal}
-              message="¿Estás seguro que deseas borrar al alumno?"
+              message="¿Está seguro que desea borrar el coche?"
               onConfirm={() => deleteCar(car_id)}
               onCancel={() => setShowModal(false)}
             />

@@ -11,7 +11,6 @@ const url_courses = `${BASE_URL}/courses`;
 export const CoursesPage = () => {
   const [courses, setCourses] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttp();
-
   useEffect(() => {
     const fetchData = async () => {
       const token = JSON.parse(localStorage.getItem("token"));
@@ -37,7 +36,7 @@ export const CoursesPage = () => {
       selector: (row) => row.year,
     },
     {
-      name: "Detalle",
+      name: "",
       selector: (row) => {
         return (
           <Link className="btn btn-warning" to={`/course/${row.id}/detail`}>
@@ -52,17 +51,17 @@ export const CoursesPage = () => {
     <Main page={"courses"}>
       <div className="container mb-5">
         <div className="row mt-5">
-          <h2 className="text-center">Lista de cursos</h2>
+          <h2 className="text-center">Listado de cursos</h2>
           <div className="p-4 shadow-lg">
             {isLoading && <Loader></Loader>}
             {courses.length > 0 && (
               <DataTable columns={columns} data={courses} pagination />
             )}
-            {courses.length < 1 && !isLoading && <div>Aún no tiene ningun curso creado</div>}
+            {courses.length < 1 && !isLoading && <div>Aún no tiene ningún curso creado.</div>}
           </div>
         </div>
         <div className="row mt-5 mb-5">
-          <h2 className="text-center">Crea un nuevo curso</h2>
+          <h2 className="text-center">Crear un nuevo curso</h2>
           <div className="col-12 shadow-lg p-4 d-flex justify-content-center">
             <FormAddCourse courses={courses} setCourses={setCourses} />
           </div>

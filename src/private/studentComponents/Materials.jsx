@@ -51,11 +51,11 @@ export const Materials = ({ order_id, setMaterials }) => {
             {...register("material", {
               required: {
                 value: true,
-                message: "Debe ingresar una descripción",
+                message: "Debe ingresar una descripción.",
               },
               maxLength: {
                 value: 50,
-                message: "La descripción no puede superar los 50 caracteres",
+                message: "La descripción no puede superar los 50 caracteres.",
               },
             })}
             className="form-control"

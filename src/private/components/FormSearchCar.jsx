@@ -54,24 +54,32 @@ export const FormSearchCar = ({setCarFound}) => {
             type="text"
             maxLength="11"
             {...register("plate", {
-              required: { value: true, message: "Debe ingresar una matrícula" },
+              required: {
+                value: true,
+                message: "Debe ingresar una matrícula.",
+              },
               maxLength: {
                 value: 11,
-                message: "Máximo 11 caracteres",
+                message: "Máximo 11 caracteres.",
+              },
+              minLength: {
+                value: 5,
+                message: "Mínimo 5 caracteres.",
               },
               pattern: {
                 value: /^[a-zA-Z0-9]+$/,
-                message: "Solo se permiten letras y números sin espacios",
+                message: "Solo se permiten letras y números sin espacios.",
               },
             })}
           />
           {errors && errors.plate && <Error error={errors.plate.message} />}
-          {isLoading 
-          ? <Loader />
-          : <button type="submit" className="btn btn-primary mx-auto mt-3">
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <button type="submit" className="btn btn-primary mx-auto mt-3">
               Buscar
             </button>
-        }
+          )}
         </div>
       </form>
     </>

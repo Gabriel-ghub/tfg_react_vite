@@ -8,7 +8,6 @@ import { Error } from "../../components/Error";
 import { useForm } from "react-hook-form";
 
 export const FormAddTeacher = ({setTeachers}) => {
-  const navigate = useNavigate();
   const { getToken } = useToken();
   const {
     register,
@@ -63,15 +62,15 @@ export const FormAddTeacher = ({setTeachers}) => {
             {...register("name", {
               required: {
                 value: true,
-                message: "El nombre es requerido",
+                message: "Campo requerido.",
               },
               minLength: {
                 value: 3,
-                message: "El nombre debe tener al menos 3 caracteres",
+                message: "El nombre debe tener al menos 3 caracteres.",
               },
               maxLength: {
                 value: 20,
-                message: "El nombre debe tener menos de 20 caracteres",
+                message: "El nombre debe tener menos de 20 caracteres.",
               },
             })}
           />
@@ -91,15 +90,15 @@ export const FormAddTeacher = ({setTeachers}) => {
             {...register("surname", {
               required: {
                 value: true,
-                message: "El apellido es requerido",
+                message: "Campo requerido.",
               },
               minLength: {
                 value: 3,
-                message: "El apellido debe tener al menos 3 caracteres",
+                message: "El apellido debe tener al menos 3 caracteres.",
               },
               maxLength: {
                 value: 20,
-                message: "El apellido debe tener menos de 20 caracteres",
+                message: "El apellido debe tener menos de 20 caracteres.",
               },
             })}
           />
@@ -120,19 +119,19 @@ export const FormAddTeacher = ({setTeachers}) => {
             {...register("email", {
               required: {
                 value: true,
-                message: "El email es requerido",
+                message: "Campo requerido.",
               },
               minLength: {
                 value: 3,
-                message: "El email debe tener al menos 3 caracteres",
+                message: "El email debe tener al menos 3 caracteres.",
               },
               maxLength: {
                 value: 20,
-                message: "El email debe tener menos de 20 caracteres",
+                message: "El email debe tener menos de 20 caracteres.",
               },
               pattern: {
                 value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                message: "El email invalido",
+                message: "El email no es válido.",
               },
             })}
           />
@@ -151,15 +150,15 @@ export const FormAddTeacher = ({setTeachers}) => {
             {...register("password", {
               required: {
                 value: true,
-                message: "La contraseña es requerida",
+                message: "Campo requerido.",
               },
               minLength: {
                 value: 6,
-                message: "La contraseña debe tener al menos 6 caracteres",
+                message: "La contraseña debe tener al menos 6 caracteres.",
               },
               maxLength: {
                 value: 16,
-                message: "La contraseña debe tener máximo 16 caracteres",
+                message: "La contraseña debe tener máximo 16 caracteres.",
               },
             })}
           />

@@ -62,7 +62,7 @@ export const FormEditUser = ({ user, courses }) => {
     if (response) {
       setSuccessMessage(response.message);
       setTimeout(() => {
-      setSuccessMessage(false);
+        setSuccessMessage(false);
       }, 2000);
     }
   };
@@ -95,72 +95,78 @@ export const FormEditUser = ({ user, courses }) => {
       <Link to={"/students"} className="btn btn-primary">
         Volver
       </Link>
-      <div className="row mt-5 shadow-lg rounded py-5">
-        <div className="col-12 d-flex justify-content-center">
+      <div className="row mt-5">
+        <h3 className="text-center">Editar datos del alumno</h3>
+        <div className="col-12 shadow-lg p-4 d-flex justify-content-center">
           <form className="col-12 col-md-6" onSubmit={handleSubmit(onSubmit)}>
-            <label htmlFor="" className="form-label">
-              Nombre
-            </label>
-            <input
-              type="text"
-              maxLength="50"
-              className="form-control"
-              {...register("name", {
-                required: {
-                  value: true,
-                  message: "El nombre es requerido",
-                },
-                minLength: {
-                  value: 2,
-                  message: "El nombre debe tener al menos 2 caracteres",
-                },
-                maxLength: {
-                  value: 50,
-                  message: "El nombre debe tener menos de 50 caracteres",
-                },
-              })}
-            />
-            {error && error.name && <Error error={error.name[0]} />}
-            {errors && errors.name && errors.name.message && (
-              <Error error={errors.name.message} />
-            )}
-            <label htmlFor="" className="form-label">
-              Apellido
-            </label>
-            <input
-              type="text"
-              maxLength="50"
-              className="form-control"
-              {...register("surname", {
-                required: {
-                  value: true,
-                  message: "El apellido es requerido",
-                },
-                minLength: {
-                  value: 2,
-                  message: "El apellido debe tener al menos 2 caracteres",
-                },
-                maxLength: {
-                  value: 50,
-                  message: "El apellido debe tener menos de 50 caracteres",
-                },
-              })}
-            />
-            {error && error.surname && <Error error={error.surname[0]} />}
-            {errors && errors.surname && errors.surname.message && (
-              <Error error={errors.surname.message} />
-            )}
-            <label htmlFor="" className="form-label">
-              Email
-            </label>
-            {/* <input
+            <div className="form-group mb-2">
+              <label htmlFor="" className="form-label">
+                Nombre
+              </label>
+              <input
+                type="text"
+                maxLength="50"
+                className="form-control"
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: "Campo requerido.",
+                  },
+                  minLength: {
+                    value: 2,
+                    message: "El nombre debe tener al menos 2 caracteres.",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "El nombre debe tener menos de 50 caracteres.",
+                  },
+                })}
+              />
+              {error && error.name && <Error error={error.name[0]} />}
+              {errors && errors.name && errors.name.message && (
+                <Error error={errors.name.message} />
+              )}
+            </div>
+            <div className="form-group mb-2">
+              <label htmlFor="" className="form-label">
+                Apellido
+              </label>
+              <input
+                type="text"
+                maxLength="50"
+                className="form-control"
+                {...register("surname", {
+                  required: {
+                    value: true,
+                    message: "Campo requerido.",
+                  },
+                  minLength: {
+                    value: 2,
+                    message: "El apellido debe tener al menos 2 caracteres.",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "El apellido debe tener menos de 50 caracteres.",
+                  },
+                })}
+              />
+              {error && error.surname && <Error error={error.surname[0]} />}
+              {errors && errors.surname && errors.surname.message && (
+                <Error error={errors.surname.message} />
+              )}
+            </div>
+            <div className="form-group mb-2">
+              <label htmlFor="" className="form-label">
+                Email
+              </label>
+              {/* <input
               type="email"
               maxLength="50"
               className="form-control"
               {...register("email", {
                 required: {
                   value: true,
-                  message: "El email es requerido",
+                  message: "Campo requerido",
                 },
                 minLength: {
                   value: 2,
@@ -176,21 +182,24 @@ export const FormEditUser = ({ user, courses }) => {
                 },
               })}
             /> */}
-            <div
-              className="form-control"
-              style={{ backgroundColor: "#e9ecef" }}
-            >
-              {getValues("email")}
+              <div
+                className="form-control"
+                style={{ backgroundColor: "#e9ecef" }}
+              >
+                {getValues("email")}
+              </div>
             </div>
             {/* {error && error.email && <Error error={error.email[0]} />} */}
-            <label htmlFor="" className="form-label">
-              Curso
-            </label>
-            <Select
-              options={options}
-              defaultValue={initialCourse}
-              onChange={(data) => setValue("course_id", data.value)}
-            />
+            <div className="form-group mb-2">
+              <label htmlFor="" className="form-label">
+                Curso
+              </label>
+              <Select
+                options={options}
+                defaultValue={initialCourse}
+                onChange={(data) => setValue("course_id", data.value)}
+              />
+            </div>
             {successMessage && (
               <div className="alert alert-info mt-2" role="alert">
                 {successMessage}
@@ -221,7 +230,7 @@ export const FormEditUser = ({ user, courses }) => {
             </div>
             <ConfirmationModal
               show={showModal}
-              message="¿Estás seguro que deseas borrar al alumno?"
+              message="¿Está seguro que desea borrar al alumno?"
               onConfirm={() => deleteStudent(id)}
               onCancel={() => setShowModal(false)}
             />
