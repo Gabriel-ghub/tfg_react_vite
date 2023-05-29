@@ -11,13 +11,13 @@ export const SearchCarPage = () => {
 
   return (
     <Main page={"search_page"}>
-      <div className="row shadow-lg mt-5 py-5">
+      <div className="row shadow-lg mt-5 py-5 gap-3">
         <div className="col-12 col-md-6 d-flex align-items-center gap-2 flex-column">
-          <FormSearchCar setCarFound={setCarFound}/>
+          <FormSearchCar setCarFound={setCarFound} />
         </div>
         <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
           {carFound && <CarCard car={carFound} />}
-          {carFound === null &&  <FormCreateCar setCarFound={setCarFound}/>}
+          {carFound === null && <FormCreateCar setCarFound={setCarFound} />}
         </div>
       </div>
     </Main>

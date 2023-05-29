@@ -1,9 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../auth/context/AuthContext";
+
 export const NavBar = () => {
   const { onLogout } = useContext(AuthContext);
+  const navbarToogle = useRef(null);
 
+const handleHideModal = () => {
+  if (window.innerWidth < 768) {
+    setTimeout(() => {
+      navbarToogle.current.click();
+    }, 300);
+  }
+};
   return (
     <>
       <header className="sticky-top">
@@ -18,6 +27,7 @@ export const NavBar = () => {
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasNavbar"
               aria-controls="offcanvasNavbar"
+              ref={navbarToogle}
             >
               <span className="navbar-toggler-icon"></span>
             </button>
@@ -40,16 +50,6 @@ export const NavBar = () => {
               </div>
               <div className="offcanvas-body">
                 <ul className="navbar-nav justify-content-end flex-grow-1 gap-3">
-                  {/* <li className="nav-item">
-                    <Link className="nav-link text-light" to={"/car"}>
-                      Crear orden
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link text-light" to={"/orders"}>
-                      Órdenes
-                    </Link>
-                  </li> */}
                   <li className="nav-item dropdown">
                     <a
                       className="nav-link dropdown-toggle"
@@ -61,12 +61,15 @@ export const NavBar = () => {
                       Órdenes
                     </a>
                     <ul className="dropdown-menu">
-                      <li className="nav-item">
+                      <li className="nav-item px-2" onClick={handleHideModal}>
                         <Link className="nav-link text-dark" to={"/car"}>
                           Crear orden
                         </Link>
                       </li>
-                      <li className="nav-item">
+                      <li className="divider">
+                        <hr />
+                      </li>
+                      <li className="nav-item px-2" onClick={handleHideModal}>
                         <Link className="nav-link text-dark" to={"/orders"}>
                           Ver órdenes
                         </Link>
@@ -84,43 +87,37 @@ export const NavBar = () => {
                       Gestión
                     </a>
                     <ul className="dropdown-menu">
-                      <li className="nav-item">
+                      <li className="nav-item px-2" onClick={handleHideModal}>
                         <Link className="nav-link text-dark" to={"/students"}>
                           Alumnos
                         </Link>
                       </li>
-                      <li className="nav-item">
+                      <li className="divider">
+                        <hr />
+                      </li>
+                      <li className="nav-item px-2" onClick={handleHideModal}>
                         <Link className="nav-link text-dark" to={"/courses"}>
                           Cursos
                         </Link>
                       </li>
-                      <li className="nav-item">
+                      <li className="divider">
+                        <hr />
+                      </li>
+                      <li className="nav-item px-2" onClick={handleHideModal}>
                         <Link className="nav-link text-dark" to={"/cars"}>
                           Coches
                         </Link>
                       </li>
-                      <li className="nav-item">
+                      <li className="divider">
+                        <hr />
+                      </li>
+                      <li className="nav-item px-2" onClick={handleHideModal}>
                         <Link className="nav-link text-dark" to={"/access"}>
                           Acceso
                         </Link>
                       </li>
                     </ul>
                   </li>
-                  {/* <li className="nav-item">
-                    <Link className="nav-link text-light" to={"/students"}>
-                      Alumnos
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link text-light" to={"/teachers"}>
-                      Profesores
-                    </Link>
-                  </li> */}
-                  {/* <li className="nav-item">
-                    <Link className="nav-link text-light" to={"/facturation"}>
-                      Facturación
-                    </Link>
-                  </li> */}
                   <button onClick={onLogout} className="btn btn-warning">
                     Cerrar sesión
                   </button>
