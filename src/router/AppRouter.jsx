@@ -18,27 +18,25 @@ export const AppRouter = () => {
   }
   //TODO: VERIFICAR ESTO
   return (
-    <>
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <LoginPage />
-            </PublicRoute>
-          }
-        ></Route>
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        }
+      ></Route>
 
-        <Route
-          path="/*"
-          element={
-            <PrivateRoute>
-                  {(isAuthenticated && role_id == 1) && <RouterApp />}
-                  {(isAuthenticated && role_id == 2 ) && <StudentRouterApp />}
-            </PrivateRoute>
-          }
-        ></Route>
-      </Routes>
-    </>
+      <Route
+        path="/*"
+        element={
+          <PrivateRoute>
+            {isAuthenticated && role_id == 1 && <RouterApp />}
+            {isAuthenticated && role_id == 2 && <StudentRouterApp />}
+          </PrivateRoute>
+        }
+      ></Route>
+    </Routes>
   );
 };

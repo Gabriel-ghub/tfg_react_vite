@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Layout } from "../components/global/Layout";
 import { Main } from "../components/global/Main";
 import { CardOrder } from "../studentComponents/CardOrder";
 import useHttp from "../../hooks/useHttp";

@@ -6,13 +6,13 @@ export const NavBar = () => {
   const { onLogout } = useContext(AuthContext);
   const navbarToogle = useRef(null);
 
-const handleHideModal = () => {
-  if (window.innerWidth < 768) {
-    setTimeout(() => {
-      navbarToogle.current.click();
-    }, 300);
-  }
-};
+  const handleHideModal = () => {
+    if (window.innerWidth < 768) {
+      setTimeout(() => {
+        navbarToogle.current.click();
+      }, 300);
+    }
+  };
   return (
     <>
       <header className="sticky-top">

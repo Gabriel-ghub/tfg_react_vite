@@ -1,28 +1,23 @@
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { Layout } from "../components/global/Layout";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { CourseDetails } from "../pages/CourseDetails";
 import { CoursesPage } from "../pages/CoursesPage";
 import { CreateOrder } from "../pages/CreateOrder";
 import { FacturationPage } from "../pages/FacturationPage";
-import { HomePage } from "../pages/HomePage";
 import { OrderDetails } from "../pages/OrderDetails";
 import { OrdersPage } from "../pages/OrdersPage";
 import { SearchCarPage } from "../pages/SearchCarPage";
 import { StudentsPage } from "../pages/StudentsPage";
 import { AccessPage } from "../pages/AccessPage";
-import { Works } from "../pages/Works";
-import { StudentAssigned } from "../pages/StudentAssigned";
 import { StudentDetails } from "../pages/StudentDetails";
-import { TeacherDetails } from "../pages/TeachersDetails";
 import { NavBar } from "../components/global/NavBar";
 import { CarsPage } from "../pages/CarsPage";
 import { CarDetails } from "../pages/CarDetails";
+import { FormularioReactivo } from "../../components/FormularioReactivo";
 export const RouterApp = () => {
   return (
     <>
       <NavBar />
       <Routes>
-
         <Route path="home" element={<OrdersPage />}></Route>
         <Route path="car" element={<SearchCarPage />}></Route>
         <Route
@@ -47,6 +42,14 @@ export const RouterApp = () => {
         <Route
           path="course/:course_id/detail"
           element={<CourseDetails />}
+        ></Route>
+        <Route
+          path="createOrderForm"
+          element={<FormularioReactivo formName={"createOrder"} />}
+        ></Route>
+        <Route
+          path="createCourseForm"
+          element={<FormularioReactivo formName={"orderDetails"} />}
         ></Route>
         <Route path="/*" element={<Navigate to={"/home"} />}></Route>
       </Routes>

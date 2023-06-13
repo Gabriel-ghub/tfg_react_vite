@@ -1,6 +1,8 @@
 export const validationType = {
   sanitize: sanitize,
   validateName: validateName,
+  email: validateEmail,
+  atLeastOne: atLeastOne,
 };
 
 function sanitize(str) {
@@ -16,4 +18,13 @@ function sanitize(str) {
 
 function validateName(cadena) {
   return sanitize(cadena.replace(/\s+/g, " ").trim());
+}
+
+function validateEmail(value) {
+  const regex = /^$|^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(value);
+}
+
+function atLeastOne(value) {
+  return value.length > 0;
 }

@@ -3,9 +3,11 @@ import { Loader } from "../../components/Loader";
 import { AuthContext } from "../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { Error } from "../../components/Error";
+import { FormularioReactivo } from "../../components/FormularioReactivo";
 
 export const LoginPage = () => {
   const { onLogin, isLoading, error } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -22,7 +24,7 @@ export const LoginPage = () => {
       <div className="container-fluid vh-100">
         <div className="row vh-100">
           <div className="col-sm-12 d-flex align-items-center justify-content-center bg-dark align-items-md-center text-white">
-            <form
+            {/* <form
               className="col-12 col-sm-6 col-md-3"
               onSubmit={handleSubmit(onSubmit)}
             >
@@ -78,7 +80,20 @@ export const LoginPage = () => {
                 </div>
               )}
               {isLoading && <Loader></Loader>}
-            </form>
+            </form> */}
+            <div className="d-flex col-12 col-sm-10 flex-column justify-content-center align-items-center gap-4">
+              <h1>Automoción CSC</h1>
+              {error && (
+                <div className="d-flex justify-content-center alert alert-danger mt-1">
+                  {error}
+                </div>
+              )}
+              <FormularioReactivo
+                formName={"loginForm"}
+                className={"col-12 col-sm-6 col-md-5 col-lg-3 gap-3"}
+                action={onSubmit}
+              />
+            </div>
           </div>
         </div>
       </div>

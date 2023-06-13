@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { BASE_URL } from "../../api/api";
 import { useToken } from "../../hooks/useToken";
 import useHttp from "../../hooks/useHttp";
+import { FormularioReactivo } from "../../components/FormularioReactivo";
 const url_anomaly = `${BASE_URL}/anomaly/create`;
 const url_order = `${BASE_URL}/order/create`;
 export const CreateOrder = () => {
@@ -21,7 +22,7 @@ export const CreateOrder = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    clearErrors
+    clearErrors,
   } = useForm();
   const [newAnomaly, setNewAnomaly] = useState("");
   const [errorsEmpty, setErrorsEmpty] = useState(false);
@@ -69,11 +70,8 @@ export const CreateOrder = () => {
 
     const response = await sendRequest(url_order, "POST", body, headers);
     if (response) {
-      let data = anomalies.map((anomaly) => {
-        return anomaly.description;
-      });
       let data_anomalias = {
-        anomalias: data,
+        anomalias: anomalies,
         order_id: response.data.id,
       };
       const body = JSON.stringify(data_anomalias);
@@ -119,18 +117,17 @@ export const CreateOrder = () => {
 
   const handleKilometresChange = (event) => {
     const { name, value } = event.target;
-    clearErrors("kilometres")
+    clearErrors("kilometres");
     const formattedValue = formatNumber(value);
     setValue("kilometres", formattedValue);
   };
   const onSubmit = (data) => {
-    if (anomalies.length < 1) {
-      setErrorsEmpty("Debe crear al menos una anomalía.");
-      return;
-    }
+    console.log(data);
+    const anomalies_data = data.anomalies[0].map((anomaly) => anomaly.label);
     let today = new Date();
     let isoDate = today.toISOString();
     let formattedDate = isoDate.substr(0, 10);
+
     const body = {
       ...data,
       car_id: carFound.id,
@@ -140,7 +137,7 @@ export const CreateOrder = () => {
       surname: validationType["validateName"](data.surname),
     };
     setErrorsEmpty("");
-    handleCreateOrder(body, anomalies);
+    handleCreateOrder(body, anomalies_data);
   };
   return (
     <Main page={"create_page"}>
@@ -395,6 +392,13 @@ export const CreateOrder = () => {
             </div>
           </form>
         </div>
+      )}
+      {carFound && (
+        <FormularioReactivo
+          formName={"createOrder"}
+          id={carFound.id}
+          action={onSubmit}
+        />
       )}
     </Main>
   );

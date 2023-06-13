@@ -13,6 +13,7 @@ import { WorksAndMaterials } from "../components/WorksAndMaterials";
 import { Error } from "../../components/Error";
 import { useToken } from "../../hooks/useToken";
 import { ConfirmationModal } from "../../components/ConfirmationModal";
+import { FormularioReactivo } from "../../components/FormularioReactivo";
 export const OrderDetails = () => {
   const navigate = useNavigate();
   const { order_id } = useParams();
@@ -478,6 +479,9 @@ export const OrderDetails = () => {
               </form>
             </div>
 
+            <div className="row mt-5">
+              <FormularioReactivo formName={"orderDetails"}/>
+            </div>
             <div className="row mt-5">
               <h3 className="text-center">Anomalías</h3>
               <div className="col-xs-12 col-md-12  p-4 shadow-lg border border-1 rounded">
